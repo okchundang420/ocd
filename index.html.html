@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한약(재) 정보 안내</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #1C3557;
+  --navy-light: #2A4A73;
+  --gold: #B8914F;
+  --gold-light: #D4A96A;
+  --cream: #F7F4EE;
+  --white: #FFFFFF;
+  --gray-100: #F2EFE8;
+  --gray-200: #E5E0D6;
+  --gray-400: #A09880;
+  --gray-600: #6B6357;
+  --gray-800: #3A342C;
+  --green: #1E7A5A;
+  --green-light: #E5F5EE;
+  --text: #2C2620;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ===== NAV ===== */
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(28, 53, 87, 0.97);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(184,145,79,0.3);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; height: 52px;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-icon {
+  width: 26px; height: 26px; background: var(--gold);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+}
+.nav-title {
+  color: white; font-size: 13px; font-weight: 500; letter-spacing: 0.02em;
+}
+.nav-tabs {
+  display: flex; gap: 0;
+}
+.nav-tab {
+  color: rgba(255,255,255,0.55);
+  font-size: 12px; font-weight: 400;
+  padding: 0 15px; height: 52px;
+  display: flex; align-items: center; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s; text-decoration: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.nav-tab:hover, .nav-tab.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold);
+}
+
+/* ===== SECTION BASE ===== */
+.page-section { min-height: 100vh; padding-top: 52px; }
+
+/* ===== PAGE 1: 환자 안내 ===== */
+#page1 {
+  background: linear-gradient(180deg, #f7f4ee 0%, #eef3f8 60%, #e8eef6 100%);
+}
+.p1-inner {
+  max-width: 720px; margin: 0 auto; padding: 44px 24px 60px;
+}
+
+/* 상단 환영 영역 */
+.p1-welcome {
+  text-align: center;
+  padding: 32px 24px 36px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid var(--gray-200);
+  box-shadow: 0 4px 20px rgba(28,53,87,0.07);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.p1-welcome::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--navy), var(--gold));
+}
+.p1-qr-icon {
+  width: 56px; height: 56px;
+  background: var(--navy);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 26px;
+}
+.p1-welcome-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--navy); line-height: 1.5; margin-bottom: 10px;
+}
+.p1-welcome-desc {
+  font-size: 13px; color: var(--gray-600); line-height: 1.8;
+}
+.p1-welcome-desc strong { color: var(--navy); }
+
+/* 안내 항목 카드 */
+.p1-cards {
+  display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 28px;
+}
+.p1-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--gray-200);
+  padding: 18px 20px;
+  display: flex; gap: 16px; align-items: flex-start;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+}
+.p1-card:hover { box-shadow: 0 4px 16px rgba(28,53,87,0.1); }
+.p1-card-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.icon-herb { background: #E5F5EE; }
+.icon-rx   { background: #EEF3FB; }
+.icon-cert { background: #FFF7E8; }
+.p1-card-body { flex: 1; }
+.p1-card-num {
+  font-size: 10px; color: var(--gold); font-weight: 600;
+  letter-spacing: 0.1em; margin-bottom: 3px;
+}
+.p1-card-title {
+  font-size: 15px; font-weight: 600; color: var(--navy);
+  margin-bottom: 4px;
+}
+.p1-card-desc { font-size: 12.5px; color: var(--gray-600); line-height: 1.65; }
+.p1-card-tags {
+  display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px;
+}
+.p1-tag {
+  font-size: 10.5px; padding: 2px 8px;
+  border-radius: 10px; font-weight: 400;
+}
+.tag-navy { background: #EEF3FB; color: var(--navy); }
+.tag-green { background: var(--green-light); color: var(--green); }
+.tag-gold  { background: #FFF7E8; color: #8A6430; }
+
+/* 확인 방법 */
+.p1-how {
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 24px;
+  color: white;
+}
+.p1-how-title {
+  font-size: 13px; color: var(--gold-light); font-weight: 600;
+  letter-spacing: 0.06em; margin-bottom: 16px;
+}
+.p1-how-steps {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.p1-how-step {
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.p1-how-step-num {
+  width: 24px; height: 24px;
+  background: rgba(184,145,79,0.25);
+  border: 1px solid rgba(184,145,79,0.5);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--gold-light);
+  flex-shrink: 0; margin-top: 1px;
+}
+.p1-how-step-text {
+  font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.6;
+}
+.p1-how-step-text strong { color: white; }
+
+/* 사업 소개 (작게, 하단에) */
+.p1-project-info {
+  background: var(--gray-100);
+  border-radius: 10px;
+  border: 1px solid var(--gray-200);
+  padding: 16px 18px;
+  margin-bottom: 24px;
+}
+.p1-pi-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.p1-pi-badge {
+  font-size: 10px; padding: 2px 8px;
+  background: var(--navy); color: white;
+  border-radius: 4px; letter-spacing: 0.05em;
+}
+.p1-pi-title { font-size: 12px; color: var(--gray-600); }
+.p1-pi-rows { display: flex; flex-direction: column; gap: 5px; }
+.p1-pi-row { display: flex; gap: 8px; font-size: 11.5px; }
+.p1-pi-label { color: var(--gray-400); min-width: 52px; flex-shrink: 0; }
+.p1-pi-value { color: var(--gray-800); line-height: 1.5; }
+
+/* 개인정보 안내 */
+.p1-privacy {
+  background: #FFFBF2;
+  border: 1px solid rgba(184,145,79,0.25);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 14px;
+  font-size: 11.5px; color: var(--gray-600); line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.scroll-to-next {
+  display: block; text-align: center;
+  padding: 16px; color: var(--gray-400);
+  font-size: 11px; letter-spacing: 0.06em;
+  cursor: pointer; text-decoration: none;
+  transition: color 0.2s;
+}
+.scroll-to-next:hover { color: var(--navy); }
+.scroll-to-next svg { display: block; margin: 0 auto 6px; animation: bob 2s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+/* ===== PAGE 2 ===== */
+#page2 { background: var(--cream); }
+.p2-inner { max-width: 720px; margin: 0 auto; padding: 40px 24px 60px; }
+.section-eyebrow { font-size: 11px; color: var(--gold); letter-spacing: 0.12em; font-weight: 500; margin-bottom: 8px; }
+.section-heading { font-family: 'Noto Serif KR', serif; font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.section-desc { font-size: 13px; color: var(--gray-600); line-height: 1.7; margin-bottom: 28px; }
+
+.rx-info-card { background: white; border-radius: 12px; border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.rx-card-header { background: var(--navy); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+.rx-card-header-title { font-family: 'Noto Serif KR', serif; font-size: 14px; color: white; font-weight: 600; }
+.rx-card-header-date { font-size: 11px; color: rgba(255,255,255,0.5); }
+.rx-card-body { padding: 20px; }
+.rx-row { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.rx-field { flex: 1; min-width: 120px; background: var(--gray-100); border-radius: 8px; padding: 10px 14px; }
+.rx-field-label { font-size: 10px; color: var(--gray-400); letter-spacing: 0.06em; margin-bottom: 3px; }
+.rx-field-value { font-size: 13px; color: var(--navy); font-weight: 500; }
+.rx-field-masked { font-size: 13px; color: var(--gray-400); font-style: italic; }
+
+.dosage-strip { display: flex; gap: 8px; margin-bottom: 20px; }
+.dosage-pill { flex: 1; background: var(--navy); border-radius: 8px; padding: 10px 12px; text-align: center; }
+.dosage-pill-num { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 700; color: var(--gold-light); line-height: 1; }
+.dosage-pill-unit { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+
+.herb-table-wrap { border: 1px solid var(--gray-200); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+.herb-table-header { display: grid; grid-template-columns: 2fr 3fr 2fr; background: var(--navy); padding: 10px 16px; }
+.herb-table-header span { font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.06em; }
+.herb-row { display: grid; grid-template-columns: 2fr 3fr 2fr; padding: 10px 16px; border-bottom: 1px solid var(--gray-100); align-items: center; }
+.herb-row:last-child { border-bottom: none; }
+.herb-row:nth-child(even) { background: var(--gray-100); }
+.herb-num { font-size: 11px; color: var(--gray-400); margin-right: 4px; }
+.herb-name { font-size: 13px; color: var(--navy); font-weight: 500; }
+.herb-code { font-size: 11px; color: var(--gray-400); font-family: monospace; }
+.herb-origin-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 12px; }
+.origin-korea { background: #E5F5EE; color: #1E7A5A; }
+.origin-china { background: #FEF3E2; color: #C07A20; }
+.origin-vietnam { background: #FFF0F0; color: #C0392B; }
+.origin-kz { background: #F0F0FE; color: #3A3AC0; }
+
+.tangjeon-info { background: linear-gradient(135deg, #F0F4FF, #F7F9FF); border: 1px solid #D4DCF0; border-radius: 10px; padding: 16px 18px; margin-bottom: 20px; }
+.tangjeon-title { font-size: 11px; color: var(--navy); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 10px; }
+.tangjeon-rows { display: flex; flex-direction: column; gap: 6px; }
+.tangjeon-row { display: flex; gap: 8px; font-size: 12px; }
+.tangjeon-label { color: var(--gray-400); min-width: 64px; flex-shrink: 0; }
+.tangjeon-value { color: var(--navy); }
+
+.notice-box { background: #FFFBF0; border: 1px solid rgba(184,145,79,0.3); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 12px 14px; font-size: 11.5px; color: var(--gray-600); line-height: 1.7; }
+
+.joje-img-section { margin-top: 28px; }
+.joje-img-label { font-size: 11px; color: var(--gold); letter-spacing: 0.08em; font-weight: 500; margin-bottom: 10px; }
+.joje-img-wrap { border-radius: 10px; overflow: hidden; border: 1px solid var(--gray-200); box-shadow: 0 3px 14px rgba(0,0,0,0.08); }
+.joje-img-wrap img { width: 100%; display: block; }
+.joje-img-caption { font-size: 10.5px; color: var(--gray-400); text-align: center; margin-top: 8px; line-height: 1.5; }
+
+/* ===== PAGE 3 ===== */
+#page3 { background: white; }
+.p3-inner { max-width: 720px; margin: 0 auto; padding: 40px 24px 60px; }
+.coming-soon-box { text-align: center; padding: 80px 32px; border: 2px dashed var(--gray-200); border-radius: 16px; background: var(--gray-100); }
+.cs-icon { font-size: 48px; margin-bottom: 16px; }
+.cs-title { font-family: 'Noto Serif KR', serif; font-size: 20px; color: var(--navy); font-weight: 700; margin-bottom: 8px; }
+.cs-desc { font-size: 13px; color: var(--gray-400); line-height: 1.7; }
+
+/* FOOTER */
+.site-footer { background: var(--gray-800); padding: 24px 32px; text-align: center; }
+.footer-text { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.8; }
+
+@media (max-width: 480px) {
+  .p1-welcome-title { font-size: 17px; }
+  .dosage-strip { flex-wrap: wrap; }
+  .herb-table-header, .herb-row { grid-template-columns: 1.8fr 2fr 1.5fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-brand">
+    <div class="nav-icon">🌿</div>
+    <div class="nav-title">한약(재) 정보 안내</div>
+  </div>
+  <div class="nav-tabs">
+    <a href="#page1" class="nav-tab active" onclick="setActive(this)">안내</a>
+    <a href="#page2" class="nav-tab" onclick="setActive(this)">조제내역</a>
+    <a href="#page3" class="nav-tab" onclick="setActive(this)">한약재 정보</a>
+  </div>
+</nav>
+
+<!-- ===== PAGE 1: 환자 안내 ===== -->
+<section class="page-section" id="page1">
+  <div class="p1-inner">
+
+    <!-- 환영 메시지 -->
+    <div class="p1-welcome">
+      <div class="p1-qr-icon">🌿</div>
+      <h1 class="p1-welcome-title">처방받으신 한약(재) 정보를<br>이 페이지에서 확인하실 수 있습니다</h1>
+      <p class="p1-welcome-desc">
+        <strong>처방 한의원</strong>과 <strong>조제탕전실</strong>에서 사용된 한약재의<br>
+        원산지, 품질검사 결과, 조제 정보를 투명하게 공개합니다.<br>
+        안심하고 복용하실 수 있도록 정확한 정보를 제공합니다.
+      </p>
+    </div>
+
+    <!-- 확인 가능한 정보 카드 -->
+    <div class="p1-cards">
+
+      <div class="p1-card">
+        <div class="p1-card-icon icon-rx">💊</div>
+        <div class="p1-card-body">
+          <div class="p1-card-num">01 · 조제내역</div>
+          <div class="p1-card-title">처방 및 복용 정보</div>
+          <div class="p1-card-desc">
+            복용 팩수, 투약일수, 복용법 등 처방 조제 내역을 확인하실 수 있습니다.<br>
+            조제탕전기관 정보도 함께 제공됩니다.
+          </div>
+          <div class="p1-card-tags">
+            <span class="p1-tag tag-navy">1회·1일 복용 팩수</span>
+            <span class="p1-tag tag-navy">투약일수</span>
+            <span class="p1-tag tag-navy">조제탕전기관</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p1-card">
+        <div class="p1-card-icon icon-herb">🌱</div>
+        <div class="p1-card-body">
+          <div class="p1-card-num">02 · 한약재 정보</div>
+          <div class="p1-card-title">약재 원산지 및 품질 정보</div>
+          <div class="p1-card-desc">
+            처방에 포함된 각 한약재의 이름, 원산지를 확인하실 수 있습니다.<br>
+            hGMP 서류 기반 품질검사성적서도 함께 제공됩니다.
+          </div>
+          <div class="p1-card-tags">
+            <span class="p1-tag tag-green">한약재명</span>
+            <span class="p1-tag tag-green">원산지</span>
+            <span class="p1-tag tag-green">품질검사성적서</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 확인 방법 -->
+    <div class="p1-how">
+      <div class="p1-how-title">📱 이용 방법</div>
+      <div class="p1-how-steps">
+        <div class="p1-how-step">
+          <span class="p1-how-step-num">1</span>
+          <span class="p1-how-step-text">상단 탭 <strong>「조제내역」</strong>을 누르면 복용법과 처방 약재 목록을 확인할 수 있습니다.</span>
+        </div>
+        <div class="p1-how-step">
+          <span class="p1-how-step-num">2</span>
+          <span class="p1-how-step-text">상단 탭 <strong>「한약재 정보」</strong>를 누르면 각 약재의 원산지와 품질검사 결과를 확인할 수 있습니다.</span>
+        </div>
+        <div class="p1-how-step">
+          <span class="p1-how-step-num">3</span>
+          <span class="p1-how-step-text">궁금하신 사항은 <strong>처방받으신 한의원</strong>에 직접 문의해 주세요.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 개인정보 안내 -->
+    <div class="p1-privacy">
+      🔒 <strong>개인정보 안내</strong> — 이 페이지에서 환자명, 처방 의료기관명 등 개인식별 정보는 개인정보보호법에 따라 비공개(OO) 처리됩니다.
+    </div>
+
+    <!-- 사업 소개 (작게, 보조 정보로) -->
+    <div class="p1-project-info">
+      <div class="p1-pi-header">
+        <span class="p1-pi-badge">사업 안내</span>
+        <span class="p1-pi-title">이 서비스는 어떻게 제공되나요?</span>
+      </div>
+      <div class="p1-pi-rows">
+        <div class="p1-pi-row">
+          <span class="p1-pi-label">주관부처</span>
+          <span class="p1-pi-value">보건복지부 · 한국한의약진흥원 한약자원관리센터</span>
+        </div>
+        <div class="p1-pi-row">
+          <span class="p1-pi-label">사업명</span>
+          <span class="p1-pi-value">한약(재) 정보 공급기관 공모사업 (2026)</span>
+        </div>
+        <div class="p1-pi-row">
+          <span class="p1-pi-label">공개 정보</span>
+          <span class="p1-pi-value">한약재명·원산지·품질검사성적서 / 조제탕전기관·복용 팩수·투약일수</span>
+        </div>
+      </div>
+    </div>
+
+    <a href="#page2" class="scroll-to-next">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      조제내역 확인하기
+    </a>
+  </div>
+</section>
+
+<!-- ===== PAGE 2: 조제내역 ===== -->
+<section class="page-section" id="page2">
+  <div class="p2-inner">
+    <div class="section-eyebrow">PRESCRIPTION RECORD</div>
+    <h2 class="section-heading">한약 조제내역</h2>
+    <p class="section-desc">첩약건강보험 시범사업 기반 처방·조제내역 정보입니다.</p>
+
+    <div class="rx-info-card">
+      <div class="rx-card-header">
+        <span class="rx-card-header-title">첩약 처방 · 조제내역 안내</span>
+        <span class="rx-card-header-date">발급일: 2026년 04월 27일</span>
+      </div>
+      <div class="rx-card-body">
+        <div class="rx-row">
+          <div class="rx-field">
+            <div class="rx-field-label">환자 성명</div>
+            <div class="rx-field-value">홍길동</div>
+          </div>
+          <div class="rx-field">
+            <div class="rx-field-label">처방 기관</div>
+            <div class="rx-field-value">옥천당한의원</div>
+          </div>
+          <div class="rx-field">
+            <div class="rx-field-label">처방의</div>
+            <div class="rx-field-value">구태훈 원장</div>
+          </div>
+        </div>
+
+        <div class="dosage-strip">
+          <div class="dosage-pill">
+            <div class="dosage-pill-num">1</div>
+            <div class="dosage-pill-unit">1회 복용 팩수</div>
+          </div>
+          <div class="dosage-pill">
+            <div class="dosage-pill-num">3</div>
+            <div class="dosage-pill-unit">1일 복용 팩수</div>
+          </div>
+          <div class="dosage-pill">
+            <div class="dosage-pill-num">10</div>
+            <div class="dosage-pill-unit">총 투약 일수</div>
+          </div>
+          <div class="dosage-pill">
+            <div class="dosage-pill-num" style="font-size:14px">식후 30분</div>
+            <div class="dosage-pill-unit">복용 방법</div>
+          </div>
+        </div>
+
+        <div class="herb-table-wrap">
+          <div class="herb-table-header">
+            <span>약재명</span>
+            <span>코드</span>
+            <span>원산지</span>
+          </div>
+          <div class="herb-row"><div><span class="herb-num">1.</span><span class="herb-name">반하</span></div><div class="herb-code">3182H1AHM</div><div><span class="herb-origin-badge origin-china">중국</span></div></div>
+          <div class="herb-row"><div><span class="herb-num">2.</span><span class="herb-name">대조</span></div><div class="herb-code">3115H1AHM</div><div><span class="herb-origin-badge origin-korea">한국</span></div></div>
+          <div class="herb-row"><div><span class="herb-num">3.</span><span class="herb-name">감초</span></div><div class="herb-code">3007H1AHM</div><div><span class="herb-origin-badge origin-kz">카자흐스탄</span></div></div>
+          <div class="herb-row"><div><span class="herb-num">4.</span><span class="herb-name">육계</span></div><div class="herb-code">3384H1AHM</div><div><span class="herb-origin-badge origin-vietnam">베트남</span></div></div>
+          <div class="herb-row"><div><span class="herb-num">5.</span><span class="herb-name">황련</span></div><div class="herb-code">3584H1AHM</div><div><span class="herb-origin-badge origin-china">중국</span></div></div>
+          <div class="herb-row"><div><span class="herb-num">6.</span><span class="herb-name">인삼</span></div><div class="herb-code">3400H1AHM</div><div><span class="herb-origin-badge origin-korea">한국</span></div></div>
+          <div class="herb-row"><div><span class="herb-num">7.</span><span class="herb-name">생강</span></div><div class="herb-code">3260H1AHM</div><div><span class="herb-origin-badge origin-korea">한국</span></div></div>
+        </div>
+
+        <div class="tangjeon-info">
+          <div class="tangjeon-title">조제탕전기관</div>
+          <div class="tangjeon-rows">
+            <div class="tangjeon-row"><span class="tangjeon-label">기관명</span><span class="tangjeon-value">옥천당 공동2창전실</span></div>
+            <div class="tangjeon-row"><span class="tangjeon-label">전화번호</span><span class="tangjeon-value">053-950-0042</span></div>
+            <div class="tangjeon-row"><span class="tangjeon-label">소재지</span><span class="tangjeon-value">대구광역시 동구 율암동 1147 옥천당공동탕전실</span></div>
+          </div>
+        </div>
+
+        <div class="notice-box">
+          본 조제내역서는 첩약건강보험 시범사업에 따라 발급됩니다.
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <a href="#page3" class="scroll-to-next">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      한약재 정보 보기
+    </a>
+  </div>
+</section>
+
+<!-- ===== PAGE 3: 한약재 정보 ===== -->
+<section class="page-section" id="page3">
+<div style="background:#1C5FA8; padding:14px 20px 12px;">
+  <div style="max-width:720px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <div style="color:white;font-size:15px;font-weight:700;letter-spacing:-0.01em;">한약재 정보 공개 시스템</div>
+      <div style="color:rgba(255,255,255,0.65);font-size:11px;margin-top:2px;">보건복지부 · 한국한의약진흥원</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 12px;color:white;font-size:11px;font-weight:500;">공모사업 참여기관</div>
+  </div>
+</div>
+
+<div style="max-width:720px;margin:0 auto;padding:20px 16px 0;">
+  <div style="background:white;border-radius:12px;border:1px solid #E5E0D6;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+    <div style="font-size:11px;color:#A09880;margin-bottom:4px;letter-spacing:0.06em;">처방 한약재 정보</div>
+    <div style="font-size:19px;font-weight:700;color:#1C5FA8;margin-bottom:6px;">처방전 약재 구성 안내</div>
+    <div style="font-size:12.5px;color:#6B6357;margin-bottom:14px;line-height:1.6;">이번 처방에 사용된 한약재의 원산지·품질검사 결과를 확인하세요</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <span style="background:#EEF3FB;color:#1C3557;font-size:12px;padding:4px 12px;border-radius:16px;">복령</span>
+      <span style="background:#EEF3FB;color:#1C3557;font-size:12px;padding:4px 12px;border-radius:16px;">작약(적)</span>
+      <span style="background:#EEF3FB;color:#1C3557;font-size:12px;padding:4px 12px;border-radius:16px;">포부자</span>
+      <span style="background:#EEF3FB;color:#1C3557;font-size:12px;padding:4px 12px;border-radius:16px;">창출</span>
+    </div>
+  </div>
+</div>
+
+<div style="max-width:720px;margin:0 auto;padding:0 16px 48px;" id="herbCards">
+
+<!-- ===== 복령 ===== -->
+<div class="herb-card" style="background:white;border-radius:12px;border:1px solid #E5E0D6;margin-bottom:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+  <div style="padding:16px 18px;display:flex;gap:14px;align-items:flex-start;">
+    <div style="width:80px;height:80px;border-radius:10px;overflow:hidden;flex-shrink:0;"><img src="data:image/jpeg;base64,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" alt="복령" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div style="flex:1;">
+      <div style="font-size:11px;color:#A09880;margin-bottom:2px;">01 / 04</div>
+      <div style="font-size:20px;font-weight:700;color:#1C3557;margin-bottom:6px;">복령</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="background:#FEF3E2;color:#B8701F;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;">CN 중국산</span>
+        <span style="background:#E5F5EE;color:#1E7A5A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;">✓ 규격품</span>
+      </div>
+      <table style="width:100%;font-size:12.5px;border-collapse:collapse;">
+        <tr><td style="color:#A09880;padding:3px 0;width:56px;">약재명</td><td style="color:#1C3557;font-weight:500;">복령 (茯苓)</td></tr>
+        <tr><td style="color:#A09880;padding:3px 0;">원산지</td><td style="color:#1C3557;">중국</td></tr>
+      </table>
+    </div>
+  </div>
+  <div style="border-top:1px solid #F2EFE8;">
+    <button onclick="toggleCert(this,'cert-bokryeong')"
+      style="width:100%;padding:12px 18px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:#1C5FA8;font-weight:500;">
+      <span style="font-size:14px;">📋</span> 시험성적서 확인하기
+      <span class="arrow" style="font-size:12px;transition:transform 0.2s;">▼</span>
+    </button>
+    <div id="cert-bokryeong" style="display:none;padding:0 18px 16px;">
+      <div style="background:#F7F9FF;border:1px solid #D4DCF0;border-radius:10px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+          <div><div style="font-size:10px;color:#A09880;margin-bottom:2px;">검사기관</div><div style="font-size:13px;font-weight:600;color:#1C5FA8;">한도제약 부설연구소</div></div>
+          <div style="text-align:right;"><div style="font-size:10px;color:#A09880;margin-bottom:2px;">성적서번호</div><div style="font-size:12px;color:#3A342C;">086-2502</div></div>
+        </div>
+        <div style="background:#1E7A5A;border-radius:8px 8px 0 0;padding:10px 14px;display:flex;justify-content:space-between;">
+          <span style="font-size:13px;font-weight:600;color:white;">품질검사 결과</span>
+          <span style="background:white;color:#1E7A5A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">전항목 적합</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr style="background:#F0F8F5;">
+            <th style="padding:8px 12px;text-align:left;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">검사항목</th>
+            <th style="padding:8px 12px;text-align:center;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">기준</th>
+            <th style="padding:8px 12px;text-align:center;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">판정</th>
+          </tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">성상</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">대한민국약전</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">확인시험</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">기준일치</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">건조감량</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">14.0% 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">회분</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">1.0% 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">이산화황</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">30ppm 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">중금속</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">30ppm 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr><td style="padding:7px 12px;color:#3A342C;">잔류농약</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">기준 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 작약(적) ===== -->
+<div class="herb-card" style="background:white;border-radius:12px;border:1px solid #E5E0D6;margin-bottom:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+  <div style="padding:16px 18px;display:flex;gap:14px;align-items:flex-start;">
+    <div style="width:80px;height:80px;border-radius:10px;overflow:hidden;flex-shrink:0;"><img src="data:image/jpeg;base64,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" alt="작약(적)" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div style="flex:1;">
+      <div style="font-size:11px;color:#A09880;margin-bottom:2px;">02 / 04</div>
+      <div style="font-size:20px;font-weight:700;color:#1C3557;margin-bottom:6px;">작약(적)</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="background:#FEF3E2;color:#B8701F;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;">CN 중국산</span>
+        <span style="background:#E5F5EE;color:#1E7A5A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;">✓ 규격품</span>
+      </div>
+      <table style="width:100%;font-size:12.5px;border-collapse:collapse;">
+        <tr><td style="color:#A09880;padding:3px 0;width:56px;">약재명</td><td style="color:#1C3557;font-weight:500;">작약 — 적작약 (赤芍藥)</td></tr>
+        <tr><td style="color:#A09880;padding:3px 0;">원산지</td><td style="color:#1C3557;">중국</td></tr>
+      </table>
+    </div>
+  </div>
+  <div style="border-top:1px solid #F2EFE8;">
+    <button onclick="toggleCert(this,'cert-jakryak')"
+      style="width:100%;padding:12px 18px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:#1C5FA8;font-weight:500;">
+      <span style="font-size:14px;">📋</span> 시험성적서 확인하기
+      <span class="arrow" style="font-size:12px;transition:transform 0.2s;">▼</span>
+    </button>
+    <div id="cert-jakryak" style="display:none;padding:0 18px 16px;">
+      <div style="background:#F7F9FF;border:1px solid #D4DCF0;border-radius:10px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+          <div><div style="font-size:10px;color:#A09880;margin-bottom:2px;">검사기관</div><div style="font-size:13px;font-weight:600;color:#1C5FA8;">한도제약 부설연구소</div></div>
+          <div style="text-align:right;"><div style="font-size:10px;color:#A09880;margin-bottom:2px;">성적서번호</div><div style="font-size:12px;color:#3A342C;">2025-500 / N250820042</div></div>
+        </div>
+        <div style="background:#1E7A5A;border-radius:8px 8px 0 0;padding:10px 14px;display:flex;justify-content:space-between;">
+          <span style="font-size:13px;font-weight:600;color:white;">품질검사 결과</span>
+          <span style="background:white;color:#1E7A5A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">전항목 적합</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr style="background:#F0F8F5;">
+            <th style="padding:8px 12px;text-align:left;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">검사항목</th>
+            <th style="padding:8px 12px;text-align:center;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">기준</th>
+            <th style="padding:8px 12px;text-align:center;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">판정</th>
+          </tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">성상</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">대한민국약전</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">확인시험</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">기준일치</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">건조감량</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">13.0% 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">회분</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">6.0% 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">이산화황</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">30ppm 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">중금속</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">30ppm 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr><td style="padding:7px 12px;color:#3A342C;">잔류농약</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">기준 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 포부자 ===== -->
+<div class="herb-card" style="background:white;border-radius:12px;border:1px solid #E5E0D6;margin-bottom:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+  <div style="padding:16px 18px;display:flex;gap:14px;align-items:flex-start;">
+    <div style="width:80px;height:80px;border-radius:10px;overflow:hidden;flex-shrink:0;"><img src="data:image/jpeg;base64,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" alt="포부자" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div style="flex:1;">
+      <div style="font-size:11px;color:#A09880;margin-bottom:2px;">03 / 04</div>
+      <div style="font-size:20px;font-weight:700;color:#1C3557;margin-bottom:6px;">포부자</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="background:#FEF3E2;color:#B8701F;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;">CN 중국산</span>
+        <span style="background:#E5F5EE;color:#1E7A5A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;">✓ 규격품</span>
+      </div>
+      <table style="width:100%;font-size:12.5px;border-collapse:collapse;">
+        <tr><td style="color:#A09880;padding:3px 0;width:56px;">약재명</td><td style="color:#1C3557;font-weight:500;">포부자 (炮附子)</td></tr>
+        <tr><td style="color:#A09880;padding:3px 0;">원산지</td><td style="color:#1C3557;">중국</td></tr>
+      </table>
+    </div>
+  </div>
+  <div style="border-top:1px solid #F2EFE8;">
+    <button onclick="toggleCert(this,'cert-pobuja')"
+      style="width:100%;padding:12px 18px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:#1C5FA8;font-weight:500;">
+      <span style="font-size:14px;">📋</span> 시험성적서 확인하기
+      <span class="arrow" style="font-size:12px;transition:transform 0.2s;">▼</span>
+    </button>
+    <div id="cert-pobuja" style="display:none;padding:0 18px 16px;">
+      <div style="background:#F7F9FF;border:1px solid #D4DCF0;border-radius:10px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+          <div><div style="font-size:10px;color:#A09880;margin-bottom:2px;">검사기관</div><div style="font-size:13px;font-weight:600;color:#1C5FA8;">한도제약 부설연구소</div></div>
+          <div style="text-align:right;"><div style="font-size:10px;color:#A09880;margin-bottom:2px;">성적서번호</div><div style="font-size:12px;color:#3A342C;">SHG-002-001-25-010</div></div>
+        </div>
+        <div style="background:#1E7A5A;border-radius:8px 8px 0 0;padding:10px 14px;display:flex;justify-content:space-between;">
+          <span style="font-size:13px;font-weight:600;color:white;">품질검사 결과</span>
+          <span style="background:white;color:#1E7A5A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">전항목 적합</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr style="background:#F0F8F5;">
+            <th style="padding:8px 12px;text-align:left;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">검사항목</th>
+            <th style="padding:8px 12px;text-align:center;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">기준</th>
+            <th style="padding:8px 12px;text-align:center;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">판정</th>
+          </tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">성상</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">대한민국약전</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">확인시험</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">기준일치</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">건조감량</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">13.0% 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">회분</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">5.0% 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">이산화황</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">30ppm 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">중금속</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">30ppm 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr><td style="padding:7px 12px;color:#3A342C;">잔류농약</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">기준 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 창출 ===== -->
+<div class="herb-card" style="background:white;border-radius:12px;border:1px solid #E5E0D6;margin-bottom:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+  <div style="padding:16px 18px;display:flex;gap:14px;align-items:flex-start;">
+    <div style="width:80px;height:80px;border-radius:10px;overflow:hidden;flex-shrink:0;"><img src="data:image/jpeg;base64,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" alt="창출" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div style="flex:1;">
+      <div style="font-size:11px;color:#A09880;margin-bottom:2px;">04 / 04</div>
+      <div style="font-size:20px;font-weight:700;color:#1C3557;margin-bottom:6px;">창출</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="background:#FEF3E2;color:#B8701F;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;">CN 중국산</span>
+        <span style="background:#E5F5EE;color:#1E7A5A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;">✓ 규격품</span>
+      </div>
+      <table style="width:100%;font-size:12.5px;border-collapse:collapse;">
+        <tr><td style="color:#A09880;padding:3px 0;width:56px;">약재명</td><td style="color:#1C3557;font-weight:500;">창출 (蒼朮)</td></tr>
+        <tr><td style="color:#A09880;padding:3px 0;">원산지</td><td style="color:#1C3557;">중국</td></tr>
+      </table>
+    </div>
+  </div>
+  <div style="border-top:1px solid #F2EFE8;">
+    <button onclick="toggleCert(this,'cert-changchul')"
+      style="width:100%;padding:12px 18px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:#1C5FA8;font-weight:500;">
+      <span style="font-size:14px;">📋</span> 시험성적서 확인하기
+      <span class="arrow" style="font-size:12px;transition:transform 0.2s;">▼</span>
+    </button>
+    <div id="cert-changchul" style="display:none;padding:0 18px 16px;">
+      <div style="background:#F7F9FF;border:1px solid #D4DCF0;border-radius:10px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+          <div><div style="font-size:10px;color:#A09880;margin-bottom:2px;">검사기관</div><div style="font-size:13px;font-weight:600;color:#1C5FA8;">한도제약 부설연구소</div></div>
+          <div style="text-align:right;"><div style="font-size:10px;color:#A09880;margin-bottom:2px;">성적서번호</div><div style="font-size:12px;color:#3A342C;">086-2501</div></div>
+        </div>
+        <div style="background:#1E7A5A;border-radius:8px 8px 0 0;padding:10px 14px;display:flex;justify-content:space-between;">
+          <span style="font-size:13px;font-weight:600;color:white;">품질검사 결과</span>
+          <span style="background:white;color:#1E7A5A;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;">전항목 적합</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr style="background:#F0F8F5;">
+            <th style="padding:8px 12px;text-align:left;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">검사항목</th>
+            <th style="padding:8px 12px;text-align:center;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">기준</th>
+            <th style="padding:8px 12px;text-align:center;color:#6B6357;font-weight:500;border-bottom:1px solid #D4EAE0;">판정</th>
+          </tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">성상</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">대한민국약전</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">확인시험</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">기준일치</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">건조감량</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">13.0% 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">회분</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">5.0% 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">이산화황</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">30ppm 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr style="background:#F9FFFE;border-bottom:1px solid #F0F8F5;"><td style="padding:7px 12px;color:#3A342C;">중금속</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">30ppm 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+          <tr><td style="padding:7px 12px;color:#3A342C;">잔류농약</td><td style="padding:7px 12px;text-align:center;color:#6B6357;">기준 이하</td><td style="padding:7px 12px;text-align:center;color:#1E7A5A;font-weight:600;">적합</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /herbCards -->
+</section>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-text">
+    본 서비스는 보건복지부·한국한의약진흥원 한약(재) 정보 공급기관 공모사업(2026)의 일환으로 운영됩니다.<br>
+    처방 관련 문의는 처방받으신 한의원으로 연락해 주세요.
+  </p>
+</footer>
+
+<script>
+function setActive(el) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function toggleCert(btn, id) {
+  var el = document.getElementById(id);
+  var arrow = btn.querySelector('.arrow');
+  if (el.style.display === 'none' || el.style.display === '') {
+    el.style.display = 'block';
+    arrow.style.transform = 'rotate(180deg)';
+  } else {
+    el.style.display = 'none';
+    arrow.style.transform = 'rotate(0deg)';
+  }
+}
+const sections = document.querySelectorAll('.page-section');
+const tabs = document.querySelectorAll('.nav-tab');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+  });
+  tabs.forEach(t => {
+    t.classList.toggle('active', t.getAttribute('href') === '#' + cur);
+  });
+});
+</script>
+</body>
+</html>
