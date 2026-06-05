@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한약(재) 정보 공급 사업 리플릿</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f3ee;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 30px 20px;
+  }
+  .print-wrap {
+    width: 210mm;
+    background: white;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.18);
+  }
+
+  /* ── 앞면 ── */
+  .front {
+    width: 210mm;
+    min-height: 297mm;
+    background: #0A2340;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .front-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.07;
+  }
+  .front-bg-circle.c1 { width: 340px; height: 340px; background: #1D9E75; top: -80px; right: -80px; }
+  .front-bg-circle.c2 { width: 200px; height: 200px; background: #C9A84C; bottom: 120px; left: -60px; }
+  .front-bg-circle.c3 { width: 120px; height: 120px; background: #fff; bottom: 60px; right: 60px; }
+
+  .front-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 32px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .front-header .badge-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.02em;
+  }
+  .badge.gov { background: rgba(201,168,76,0.2); color: #C9A84C; border: 1px solid rgba(201,168,76,0.4); }
+  .badge.nikom { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); }
+  .front-header .year { font-size: 10px; color: rgba(255,255,255,0.4); }
+
+  .front-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 32px 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .front-eyebrow {
+    font-size: 11px;
+    color: #1D9E75;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .front-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .front-title em {
+    font-style: normal;
+    color: #C9A84C;
+  }
+  .front-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    margin-bottom: 36px;
+    max-width: 340px;
+  }
+
+  .front-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .front-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .front-card .icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-size: 16px;
+  }
+  .front-card .icon.green { background: rgba(29,158,117,0.2); }
+  .front-card .icon.gold { background: rgba(201,168,76,0.2); }
+  .front-card .icon.blue { background: rgba(255,255,255,0.1); }
+  .front-card .label {
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .front-qr-area {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .qr-placeholder {
+    width: 68px;
+    height: 68px;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.9);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: #0A2340;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .front-qr-text .q-title { font-size: 12px; color: #fff; font-weight: 500; margin-bottom: 4px; }
+  .front-qr-text .q-desc { font-size: 10px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+  .front-footer {
+    padding: 18px 32px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .front-footer .org { font-size: 10px; color: rgba(255,255,255,0.4); }
+  .front-footer .org strong { color: rgba(255,255,255,0.7); }
+  .front-footer .law-basis {
+    font-size: 9px;
+    color: rgba(255,255,255,0.3);
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  /* ── 뒷면 ── */
+  .back {
+    width: 210mm;
+    min-height: 297mm;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+  .back-header {
+    background: #0A2340;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .back-header-line {
+    width: 3px;
+    height: 32px;
+    background: #1D9E75;
+    border-radius: 2px;
+  }
+  .back-header h2 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 600;
+  }
+  .back-header span {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-left: 8px;
+  }
+
+  .back-body { padding: 28px 32px; flex: 1; }
+
+  .section-title {
+    font-size: 11px;
+    color: #1D9E75;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e8e4d9;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .info-card {
+    border: 1px solid #e8e4d9;
+    border-radius: 10px;
+    padding: 16px;
+    background: #fafaf8;
+  }
+  .info-card .num {
+    font-size: 10px;
+    color: #1D9E75;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+  .info-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0A2340;
+    margin-bottom: 5px;
+  }
+  .info-card p {
+    font-size: 11px;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+
+  .step-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 24px;
+  }
+  .step-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
+  .step-item:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -8px;
+    top: 16px;
+    font-size: 14px;
+    color: #1D9E75;
+    font-weight: 700;
+  }
+  .step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #0A2340;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .step-label { font-size: 10.5px; color: #374151; font-weight: 500; line-height: 1.4; }
+  .step-sub { font-size: 9.5px; color: #9ca3af; margin-top: 2px; line-height: 1.3; }
+
+  .info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-size: 11.5px;
+  }
+  .info-table th {
+    background: #0A2340;
+    color: #fff;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 11px;
+  }
+  .info-table th:first-child { border-radius: 6px 0 0 0; }
+  .info-table th:last-child { border-radius: 0 6px 0 0; }
+  .info-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0ede6;
+    color: #374151;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .info-table tr:nth-child(even) td { background: #fafaf8; }
+  .info-table tr:last-child td { border-bottom: none; }
+  .tag {
+    display: inline-block;
+    background: #e6f4ef;
+    color: #0F6E56;
+    font-size: 9.5px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .bottom-notice {
+    background: #f8f6f1;
+    border-top: 2px solid #C9A84C;
+    padding: 16px 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .notice-icon {
+    width: 28px;
+    height: 28px;
+    background: #C9A84C;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .notice-text { font-size: 10.5px; color: #4b5563; line-height: 1.65; }
+  .notice-text strong { color: #0A2340; font-weight: 700; }
+
+  .back-footer {
+    background: #0A2340;
+    padding: 12px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .back-footer p { font-size: 9.5px; color: rgba(255,255,255,0.4); }
+  .back-footer strong { color: rgba(255,255,255,0.7); }
+
+  @media print {
+    body { background: none; padding: 0; }
+    .front, .back { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+<div class="print-wrap">
+
+  <!-- ════ 앞면 ════ -->
+  <div class="front">
+    <div class="front-bg-circle c1"></div>
+    <div class="front-bg-circle c2"></div>
+    <div class="front-bg-circle c3"></div>
+
+    <div class="front-header">
+      <div class="badge-group">
+        <span class="badge gov">보건복지부</span>
+        <span class="badge nikom">한국한의약진흥원</span>
+      </div>
+      <span class="year">2026 공모사업</span>
+    </div>
+
+    <div class="front-hero">
+      <div class="front-eyebrow">Korean Herbal Medicine Information</div>
+      <h1 class="front-title">
+        한약(재)<br>
+        정보 공급 <em>사업</em><br>
+        환자 안내
+      </h1>
+      <p class="front-subtitle">
+        내가 복용하는 한약, 이제 QR코드로<br>
+        원산지·품질 정보를 직접 확인하세요.
+      </p>
+
+      <div class="front-cards">
+        <div class="front-card">
+          <div class="icon green">🌿</div>
+          <div class="label">한약재<br>원산지 정보</div>
+        </div>
+        <div class="front-card">
+          <div class="icon gold">✅</div>
+          <div class="label">hGMP<br>품질 인증</div>
+        </div>
+        <div class="front-card">
+          <div class="icon blue">📱</div>
+          <div class="label">QR코드<br>즉시 확인</div>
+        </div>
+      </div>
+
+      <div class="front-qr-area">
+        <div class="qr-placeholder">QR<br>코드</div>
+        <div class="front-qr-text">
+          <div class="q-title">스마트폰으로 QR코드를 스캔하세요</div>
+          <div class="q-desc">처방전에 인쇄된 QR코드를 카메라로 찍으면<br>내 한약재 정보 웹페이지가 즉시 열립니다.<br>별도 앱 설치 없이 확인 가능합니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="front-footer">
+      <div class="org">주관기관 <strong>한국한의약진흥원</strong></div>
+      <div class="law-basis">
+        보건복지부 제5차 한의약육성발전종합계획<br>
+        한약 생산·소비·안전 정보 통합 전달체계 구축
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ 뒷면 ════ -->
+  <div class="back">
+    <div class="back-header">
+      <div class="back-header-line"></div>
+      <div>
+        <h2>한약(재) 정보 공급 사업 안내</h2>
+        <span>환자분께서 알아야 할 주요 내용</span>
+      </div>
+    </div>
+
+    <div class="back-body">
+
+      <div class="section-title">이 사업은 무엇인가요?</div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="num">사업 목적</div>
+          <h3>한약 정보 투명성 강화</h3>
+          <p>환자가 복용하는 한약재의 원산지, 품질검사 결과, 조제 공정 정보를 QR코드를 통해 직접 확인할 수 있도록 합니다.</p>
+        </div>
+        <div class="info-card">
+          <div class="num">사업 근거</div>
+          <h3>국가 정책 기반 사업</h3>
+          <p>보건복지부 제5차 한의약육성발전종합계획에 따른 한국한의약진흥원 주관 공모사업으로, 국비 지원을 받아 운영됩니다.</p>
+        </div>
+        <div class="info-card">
+          <div class="num">품질 기준</div>
+          <h3>hGMP 인증 한약재 사용</h3>
+          <p>한약 제조·품질관리기준(hGMP)을 충족하는 규격 한약재만을 사용하며, 모든 성적서를 전산으로 관리합니다.</p>
+        </div>
+        <div class="info-card">
+          <div class="num">정보 보안</div>
+          <h3>본인 인증 후 조회</h3>
+          <p>처방전 고유 QR코드는 본인 인증을 거쳐야 정보를 확인할 수 있어 개인 의료정보가 안전하게 보호됩니다.</p>
+        </div>
+      </div>
+
+      <div class="section-title">QR코드 사용 방법</div>
+      <div class="step-flow">
+        <div class="step-item">
+          <div class="step-circle">1</div>
+          <div class="step-label">처방전·정보지<br>QR코드 확인</div>
+          <div class="step-sub">한약 수령 시<br>동봉된 정보지</div>
+        </div>
+        <div class="step-item">
+          <div class="step-circle">2</div>
+          <div class="step-label">스마트폰<br>카메라 스캔</div>
+          <div class="step-sub">앱 설치 없이<br>카메라 앱으로</div>
+        </div>
+        <div class="step-item">
+          <div class="step-circle">3</div>
+          <div class="step-label">휴대폰번호<br>본인 인증</div>
+          <div class="step-sub">개인정보 보호를<br>위한 인증 절차</div>
+        </div>
+        <div class="step-item">
+          <div class="step-circle">4</div>
+          <div class="step-label">한약재 정보<br>웹페이지 확인</div>
+          <div class="step-sub">원산지·품질<br>조제 정보 열람</div>
+        </div>
+      </div>
+
+      <div class="section-title">확인 가능한 정보 항목</div>
+      <table class="info-table">
+        <thead>
+          <tr>
+            <th style="width:22%">구분</th>
+            <th style="width:38%">제공 항목</th>
+            <th>내용 설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag">한약재 이력</span></td>
+            <td>원산지, 수입/생산 이력</td>
+            <td>각 한약재의 생산 국가 및 유통 경로 정보</td>
+          </tr>
+          <tr>
+            <td><span class="tag">품질 검사</span></td>
+            <td>hGMP 성적서, 품질 검사 결과</td>
+            <td>관능검사, 물리·이화학적 검사 결과 포함</td>
+          </tr>
+          <tr>
+            <td><span class="tag">처방 구성약재</span></td>
+            <td>처방 구성약재, 공동조제실 정보</td>
+            <td>처방 구성 한약재 정보와 조제 담당 기관(공동조제실)</td>
+          </tr>
+          <tr>
+            <td><span class="tag">복약 안내</span></td>
+            <td>복용법, 복용 횟수</td>
+            <td>1일 복용 횟수, 복용 방법, 보관 방법</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-title">참여 의료기관</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;">
+        <div style="background:#f0f9f5; border:1px solid #9FE1CB; border-radius:8px; padding:10px 14px; min-width:140px;">
+          <div style="font-size:9px; color:#0F6E56; font-weight:700; margin-bottom:3px;">주관기관</div>
+          <div style="font-size:12px; font-weight:700; color:#0A2340;">한국한의약진흥원</div>
+          <div style="font-size:9.5px; color:#6b7280;">한약자원관리센터</div>
+        </div>
+        <div style="background:#fafaf8; border:1px solid #e8e4d9; border-radius:8px; padding:10px 14px; min-width:110px;">
+          <div style="font-size:9px; color:#888; font-weight:700; margin-bottom:3px;">참여기관</div>
+          <div style="font-size:12px; font-weight:700; color:#0A2340;">목민정한의원</div>
+        </div>
+        <div style="background:#fafaf8; border:1px solid #e8e4d9; border-radius:8px; padding:10px 14px; min-width:130px;">
+          <div style="font-size:9px; color:#888; font-weight:700; margin-bottom:3px;">참여기관</div>
+          <div style="font-size:12px; font-weight:700; color:#0A2340;">옥천당 공동조제실</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-notice">
+      <div class="notice-icon">!</div>
+      <div class="notice-text">
+        <strong>개인정보 안내:</strong> 본 서비스는 처방전 고유 QR코드와 휴대폰 본인인증을 통해서만 접근 가능하며, 환자 본인의 정보만 확인 가능합니다. 수집된 만족도 조사 의견은 서비스 품질 향상에만 활용되며, 의료기관은 선택적으로 정보 제공 여부를 결정할 수 있습니다.
+      </div>
+    </div>
+
+    <div class="back-footer">
+      <p>주관기관 <strong>한국한의약진흥원</strong> · 한약자원관리센터</p>
+      <p>한약(재) 정보 공급 사업 · 2026</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
