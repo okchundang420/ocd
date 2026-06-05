@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한약재 정보 안내 — 홍길동님</title>
+<style>
+  :root {
+    --primary: #4a7c59;
+    --primary-light: #6a9e78;
+    --primary-dark: #2f5c3a;
+    --accent: #c8a96e;
+    --accent-light: #e8d5a8;
+    --bg: #f7f4ee;
+    --bg-card: #ffffff;
+    --text: #2a2a2a;
+    --text-muted: #7a7a6a;
+    --border: #e0d8c8;
+    --pass: #2d7a4f;
+    --pass-bg: #edf7f1;
+    --shadow: 0 2px 12px rgba(74,124,89,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .header { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-light) 100%); padding: 28px 20px 24px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: '🌿'; position: absolute; left: -10px; top: -10px; font-size: 80px; opacity: .10; transform: rotate(-20deg); }
+  .header::after  { content: '🌿'; position: absolute; right: -10px; bottom: -10px; font-size: 80px; opacity: .10; transform: rotate(20deg); }
+  .header-badge { display: inline-block; background: rgba(255,255,255,0.18); color: #fff; font-size: 11px; letter-spacing: 1px; padding: 3px 12px; border-radius: 20px; margin-bottom: 10px; }
+  .header h1 { color: #fff; font-size: 20px; font-weight: 700; line-height: 1.5; }
+  .header h1 span { color: var(--accent-light); }
+  .header p { color: rgba(255,255,255,0.75); font-size: 12px; margin-top: 6px; }
+
+  /* TABS */
+  .tabs { display: flex; background: var(--bg-card); border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .tab { flex: 1; padding: 10px 2px 11px; text-align: center; cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .tab-icon { font-size: 17px; line-height: 1; }
+  .tab-label { font-size: 10.5px; font-weight: 600; color: var(--text-muted); line-height: 1.2; }
+  .tab.active .tab-label { color: var(--primary); }
+  .tab.active { border-bottom-color: var(--primary); background: rgba(74,124,89,0.04); }
+  .tab:hover:not(.active) { background: var(--bg); }
+
+  .page { display: none; padding: 20px 16px 40px; max-width: 600px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  .section-title { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 14px; margin-top: 4px; }
+  .section-title .icon { background: var(--primary); color: #fff; width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+
+  /* PAGE 1 — 사업안내 */
+  .guide-hero { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 18px; padding: 22px 20px; color: #fff; margin-bottom: 18px; text-align: center; }
+  .guide-hero h2 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .guide-hero p { font-size: 12px; opacity: .85; line-height: 1.7; }
+
+  .intro-box { background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border); padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .intro-box p { font-size: 13px; color: var(--text); line-height: 1.85; }
+  .intro-box .basis { margin-top: 12px; padding: 12px 14px; background: #f4f8f5; border-left: 3px solid var(--primary); border-radius: 0 10px 10px 0; font-size: 12px; color: #4a4a3a; line-height: 1.75; }
+  .intro-box .basis strong { color: var(--primary-dark); }
+
+  .step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+  .step-item { display: flex; gap: 12px; align-items: flex-start; background: var(--bg-card); border-radius: 13px; padding: 14px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-text { font-size: 13px; line-height: 1.6; color: var(--text); padding-top: 2px; }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .info-item { background: var(--bg-card); border-radius: 12px; padding: 13px; border: 1px solid var(--border); }
+  .info-item .i-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; letter-spacing: .4px; }
+  .info-item .i-value { font-size: 12px; color: var(--text); font-weight: 600; line-height: 1.5; }
+
+  /* PAGE 2 — 조제내역 */
+  .rx-meta { background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border); padding: 16px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .rx-meta-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .rx-meta-top span:first-child { font-size: 13px; font-weight: 700; color: var(--primary-dark); }
+  .rx-meta-top span:last-child  { font-size: 11px; color: var(--text-muted); }
+  .rx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .rx-cell { background: var(--bg); border-radius: 9px; padding: 11px 12px; }
+  .rx-cell .lbl { font-size: 10px; color: var(--text-muted); margin-bottom: 2px; }
+  .rx-cell .val { font-size: 13px; font-weight: 700; }
+
+  .dosage-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 14px; }
+  .dosage-item { background: var(--bg-card); border-radius: 13px; border: 1px solid var(--border); padding: 14px; text-align: center; box-shadow: var(--shadow); }
+  .dosage-item .num { font-size: 24px; font-weight: 800; color: var(--primary); line-height: 1; }
+  .dosage-item .unit { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .dosage-item .lbl { font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 5px; }
+
+  .herb-table { background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .herb-table-header { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--primary); color: #fff; padding: 9px 14px; font-size: 12px; font-weight: 600; }
+  .herb-row { display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 11px 14px; border-top: 1px solid var(--border); align-items: center; font-size: 13px; }
+  .herb-row:nth-child(even) { background: #faf8f4; }
+  .origin-badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--pass-bg); color: var(--pass); font-weight: 600; }
+
+  .dispensary-minor { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); padding: 13px 15px; box-shadow: var(--shadow); }
+  .dispensary-minor .dm-title { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: .4px; margin-bottom: 8px; }
+  .dispensary-minor .dm-row { display: flex; gap: 8px; align-items: baseline; font-size: 12px; margin-bottom: 4px; }
+  .dispensary-minor .dm-row:last-child { margin-bottom: 0; }
+  .dispensary-minor .dm-label { color: var(--text-muted); min-width: 42px; font-size: 11px; }
+  .dispensary-minor .dm-value { color: var(--text); font-weight: 500; }
+
+  /* PAGE 3 — 한약재 정보 */
+  .herb-cards { display: flex; flex-direction: column; gap: 12px; }
+  .herb-card { background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); }
+  .herb-card-header { display: flex; align-items: center; gap: 13px; padding: 15px; }
+  .herb-icon { width: 52px; height: 52px; border-radius: 13px; background: linear-gradient(135deg, #eaf2ec, #d6eade); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .herb-icon svg { width: 30px; height: 30px; }
+  .herb-info { flex: 1; min-width: 0; }
+  .herb-name  { font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 5px; }
+  .herb-tags  { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px; }
+  .origin-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--pass-bg); color: var(--pass); font-weight: 600; white-space: nowrap; }
+  .grade-tag  { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #fff8e6; color: #a07020; font-weight: 600; white-space: nowrap; }
+  .code-tag   { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: #f0f0f8; color: #4a4a8a; font-weight: 600; white-space: nowrap; letter-spacing: .3px; }
+
+  /* 펼침 버튼 — 성적서 확인 */
+  .cert-toggle { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: #f4f8f5; border-top: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .cert-toggle-label { font-size: 12px; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: 6px; }
+  .cert-toggle-label::before { content: '📄'; font-size: 13px; }
+  .chevron { font-size: 14px; color: var(--primary); transition: transform .3s; font-weight: 700; }
+  .herb-card.open .chevron { transform: rotate(180deg); }
+
+  .herb-detail { display: none; padding: 14px 15px 15px; border-top: 1px solid var(--border); }
+  .herb-card.open .herb-detail { display: block; }
+  .detail-label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: .4px; margin-bottom: 6px; }
+  .cert-info { font-size: 12px; color: var(--text-muted); display: flex; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .cert-info span strong { color: var(--text); }
+  .quality-table { width: 100%; border-collapse: collapse; font-size: 12px; background: #fafaf8; border-radius: 10px; overflow: hidden; }
+  .quality-table th { background: var(--primary); color: #fff; padding: 7px 10px; font-weight: 600; text-align: left; }
+  .quality-table td { padding: 7px 10px; border-top: 1px solid var(--border); }
+  .quality-table tr:nth-child(even) td { background: #f5f3ee; }
+  .pass-badge { background: var(--pass-bg); color: var(--pass); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+
+  /* PAGE 4 — 처방의료기관 */
+  .clinic-hero { background: linear-gradient(135deg, #2f5c3a, var(--primary)); border-radius: 18px; padding: 22px 20px; color: #fff; margin-bottom: 18px; display: flex; align-items: center; gap: 16px; }
+  .clinic-emblem { width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .clinic-hero h2 { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
+  .clinic-hero p { font-size: 12px; opacity: .8; }
+
+  .clinic-card { background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border); padding: 4px 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
+  .clinic-row { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--border); }
+  .clinic-row:last-child { border-bottom: none; }
+  .cr-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--pass-bg); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .cr-body { flex: 1; }
+  .cr-label { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; font-weight: 600; }
+  .cr-value { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.5; }
+  .cr-value.sm { font-size: 13px; }
+
+  .subject-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .subject-tag { background: var(--pass-bg); color: var(--pass); font-size: 12px; padding: 4px 10px; border-radius: 10px; font-weight: 600; }
+
+  .contact-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; background: var(--primary); color: #fff; border: none; border-radius: 13px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; text-decoration: none; }
+
+  .notice-box { background: #fff8e8; border: 1px solid var(--accent-light); border-radius: 12px; padding: 13px 15px; margin-top: 14px; font-size: 12px; color: #7a5a20; line-height: 1.7; }
+  .notice-box strong { color: #5a3a00; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">보건복지부 · 한국한의약진흥원</div>
+  <h1><span>홍길동</span>님의 한약(재) 정보</h1>
+  <p>한약(재) 정보 제공 사업</p>
+</div>
+
+<!-- 탭 순서: 사업안내 → 조제내역 → 한약재정보 → 처방의료기관 -->
+<div class="tabs">
+  <div class="tab active" onclick="showPage('p1',this)">
+    <div class="tab-icon">🌿</div>
+    <div class="tab-label">사업안내</div>
+  </div>
+  <div class="tab" onclick="showPage('p2',this)">
+    <div class="tab-icon">📋</div>
+    <div class="tab-label">조제내역</div>
+  </div>
+  <div class="tab" onclick="showPage('p3',this)">
+    <div class="tab-icon">🌱</div>
+    <div class="tab-label">한약재정보</div>
+  </div>
+  <div class="tab" onclick="showPage('p4',this)">
+    <div class="tab-icon">🏥</div>
+    <div class="tab-label">처방의료기관</div>
+  </div>
+</div>
+
+<!-- ══ PAGE 1: 사업안내 ══ -->
+<div class="page active" id="p1">
+  <div class="guide-hero">
+    <h2>한약(재) 정보를 투명하게 공개합니다</h2>
+    <p>처방 한의원과 공동조제실에서 사용된 한약재의<br>원산지·품질검사 결과·조제 정보를 확인하세요.</p>
+  </div>
+
+  <div class="section-title"><div class="icon">📌</div>사업 소개</div>
+  <div class="intro-box">
+    <p>본 사업은 <strong>제5차 한의약육성발전종합계획</strong>(한약 안전사용 인프라 구축 — "한약 생산·소비·안전 정보 통합 전달체계 구축")에 근거하여, 한의 의료기관에서 QR 등을 제공함으로써 최종 소비자(국민 등)가 한약 관련 정보를 직접 확인할 수 있도록 합니다.</p>
+    <div class="basis">이를 통해 <strong>한약 소비 활성화</strong> 및 <strong>한의약 산업 발전</strong>을 도모하고, 한약재의 원산지·품질검사 결과 등을 투명하게 공개하여 국민의 한약 신뢰도를 높이고자 합니다.</div>
+  </div>
+
+  <div class="section-title"><div class="icon">📖</div>이용 방법</div>
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>「조제내역」 탭</strong>에서 복용법과 처방 약재 목록을 확인하세요.</div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>「한약재 정보」 탭</strong>에서 각 약재의 원산지와 품질검사 결과를 확인하세요.</div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-text">궁금하신 사항은 <strong>처방받으신 한의원</strong>에 문의해 주세요.</div></div>
+  </div>
+
+  <div class="section-title"><div class="icon">ℹ️</div>사업 안내</div>
+  <div class="info-grid">
+    <div class="info-item"><div class="i-label">주관부처</div><div class="i-value">보건복지부 · 한국한의약진흥원 한약자원관리센터</div></div>
+    <div class="info-item"><div class="i-label">사업명</div><div class="i-value">한약(재) 정보 제공 사업 (2026)</div></div>
+    <div class="info-item"><div class="i-label">공개 정보</div><div class="i-value">한약재명 · 원산지 · 품질검사성적서</div></div>
+    <div class="info-item"><div class="i-label">조제 정보</div><div class="i-value">공동조제실 · 복용 팩수 · 투약일수</div></div>
+  </div>
+</div>
+
+<!-- ══ PAGE 2: 조제내역 ══ -->
+<div class="page" id="p2">
+  <div class="section-title"><div class="icon">💊</div>처방 · 조제내역</div>
+  <div class="rx-meta">
+    <div class="rx-meta-top">
+      <span>처방 · 조제내역서</span>
+      <span>발급일: 2026년 04월 27일</span>
+    </div>
+    <div class="rx-grid">
+      <div class="rx-cell"><div class="lbl">환자 성명</div><div class="val">홍길동</div></div>
+      <div class="rx-cell"><div class="lbl">처방 기관</div><div class="val">목민정한의원</div></div>
+      <div class="rx-cell"><div class="lbl">처방의</div><div class="val">이민재 원장</div></div>
+      <div class="rx-cell"><div class="lbl">전화번호</div><div class="val" style="font-size:12px;">043-853-1075</div></div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="icon">🕐</div>복용 정보</div>
+  <div class="dosage-grid">
+    <div class="dosage-item"><div class="num">1</div><div class="unit">팩</div><div class="lbl">1회 복용</div></div>
+    <div class="dosage-item"><div class="num">3</div><div class="unit">팩/일</div><div class="lbl">1일 복용</div></div>
+    <div class="dosage-item"><div class="num">10</div><div class="unit">일</div><div class="lbl">총 투약일수</div></div>
+    <div class="dosage-item"><div class="num" style="font-size:13px;padding-top:4px;">식후<br>30분</div><div class="lbl">복용 방법</div></div>
+  </div>
+
+  <div class="section-title"><div class="icon">🌿</div>처방 약재 목록</div>
+  <div class="herb-table">
+    <div class="herb-table-header"><span>약재명</span><span>코드</span><span>원산지</span></div>
+    <div class="herb-row"><span>1. 반하</span><span style="font-size:11px;color:var(--text-muted);">3182H1AHM</span><span><span class="origin-badge">🇨🇳 중국</span></span></div>
+    <div class="herb-row"><span>2. 대조</span><span style="font-size:11px;color:var(--text-muted);">3115H1AHM</span><span><span class="origin-badge">🇰🇷 한국</span></span></div>
+    <div class="herb-row"><span>3. 감초</span><span style="font-size:11px;color:var(--text-muted);">3007H1AHM</span><span><span class="origin-badge">🇰🇿 카자흐스탄</span></span></div>
+    <div class="herb-row"><span>4. 육계</span><span style="font-size:11px;color:var(--text-muted);">3384H1AHM</span><span><span class="origin-badge">🇻🇳 베트남</span></span></div>
+    <div class="herb-row"><span>5. 황련</span><span style="font-size:11px;color:var(--text-muted);">3584H1AHM</span><span><span class="origin-badge">🇨🇳 중국</span></span></div>
+    <div class="herb-row"><span>6. 인삼</span><span style="font-size:11px;color:var(--text-muted);">3400H1AHM</span><span><span class="origin-badge">🇰🇷 한국</span></span></div>
+    <div class="herb-row"><span>7. 생강</span><span style="font-size:11px;color:var(--text-muted);">3260H1AHM</span><span><span class="origin-badge">🇰🇷 한국</span></span></div>
+  </div>
+
+  <div class="dispensary-minor">
+    <div class="dm-title">공동조제실</div>
+    <div class="dm-row"><span class="dm-label">기관명</span><span class="dm-value">옥천당 공동2탕전실</span></div>
+    <div class="dm-row"><span class="dm-label">소재지</span><span class="dm-value">대구광역시 동구 율암동 1147</span></div>
+  </div>
+</div>
+
+<!-- ══ PAGE 3: 한약재 정보 ══ -->
+<div class="page" id="p3">
+  <div class="section-title"><div class="icon">🌱</div>한약재 정보</div>
+  <div class="herb-cards" id="herbCards"></div>
+</div>
+
+<!-- ══ PAGE 4: 처방의료기관 ══ -->
+<div class="page" id="p4">
+  <div class="clinic-hero">
+    <div class="clinic-emblem">🏥</div>
+    <div>
+      <h2>목민정한의원</h2>
+      <p>처방의료기관 안내</p>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="icon">🔍</div>기관 소개</div>
+  <div class="clinic-card">
+    <div class="clinic-row">
+      <div class="cr-icon">🏷️</div>
+      <div class="cr-body"><div class="cr-label">기관명</div><div class="cr-value">목민정한의원</div></div>
+    </div>
+    <div class="clinic-row">
+      <div class="cr-icon">👨‍⚕️</div>
+      <div class="cr-body"><div class="cr-label">대표 원장</div><div class="cr-value">이민재 원장</div></div>
+    </div>
+    <div class="clinic-row">
+      <div class="cr-icon">📍</div>
+      <div class="cr-body"><div class="cr-label">소재지</div><div class="cr-value sm">충청북도 충주시 중앙로 47, 3층</div></div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="icon">📞</div>연락처</div>
+  <div class="clinic-card">
+    <div class="clinic-row">
+      <div class="cr-icon">📞</div>
+      <div class="cr-body"><div class="cr-label">대표 전화</div><div class="cr-value">043-853-1075</div></div>
+    </div>
+  </div>
+  <a class="contact-btn" href="tel:043-853-1075">📞 &nbsp;한의원 전화 연결</a>
+
+  <div class="notice-box">
+    <strong>안내</strong><br>
+    본 처방은 <strong>첩약건강보험 시범사업</strong>에 따라 발급되었습니다. 처방 내용 및 복용 방법에 대한 문의는 처방의료기관에 직접 연락해 주세요.
+  </div>
+</div>
+
+<script>
+const CAPSULE_SVG = `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="3" y="11" width="26" height="10" rx="5" fill="#4a7c59" opacity="0.15"/>
+  <rect x="3" y="11" width="13" height="10" rx="5" fill="#4a7c59"/>
+  <rect x="16" y="11" width="13" height="10" rx="5" fill="#c8a96e"/>
+  <line x1="16" y1="11" x2="16" y2="21" stroke="white" stroke-width="1.2"/>
+</svg>`;
+
+const HERBS = [
+  { name:'복령',   hanja:'茯苓',   origin:'중국', flag:'🇨🇳', code:'3215H1AHM',
+    certNo:'086-2502', lab:'한도제약 부설연구소',
+    quality:[{item:'성상',std:'대한민국약전',result:'적합'},{item:'확인시험',std:'기준일치',result:'적합'},{item:'건조감량',std:'14.0% 이하',result:'적합'},{item:'회분',std:'1.0% 이하',result:'적합'},{item:'이산화황',std:'30ppm 이하',result:'적합'},{item:'중금속',std:'30ppm 이하',result:'적합'},{item:'잔류농약',std:'기준 이하',result:'적합'}]},
+  { name:'작약(적)', hanja:'赤芍藥', origin:'중국', flag:'🇨🇳', code:'3419H1AHM',
+    certNo:'2025-500 / N250820042', lab:'한도제약 부설연구소',
+    quality:[{item:'성상',std:'대한민국약전',result:'적합'},{item:'확인시험',std:'기준일치',result:'적합'},{item:'건조감량',std:'13.0% 이하',result:'적합'},{item:'회분',std:'6.0% 이하',result:'적합'},{item:'이산화황',std:'30ppm 이하',result:'적합'},{item:'중금속',std:'30ppm 이하',result:'적합'},{item:'잔류농약',std:'기준 이하',result:'적합'}]},
+  { name:'포부자',  hanja:'炮附子', origin:'중국', flag:'🇨🇳', code:'3220H1AHM',
+    certNo:'2025-611', lab:'한도제약 부설연구소',
+    quality:[{item:'성상',std:'대한민국약전',result:'적합'},{item:'확인시험',std:'기준일치',result:'적합'},{item:'건조감량',std:'12.0% 이하',result:'적합'},{item:'회분',std:'5.0% 이하',result:'적합'},{item:'이산화황',std:'30ppm 이하',result:'적합'},{item:'알칼로이드',std:'기준 이하',result:'적합'},{item:'잔류농약',std:'기준 이하',result:'적합'}]},
+  { name:'창출',   hanja:'蒼朮',   origin:'중국', flag:'🇨🇳', code:'3472H1AHM',
+    certNo:'2025-488', lab:'한도제약 부설연구소',
+    quality:[{item:'성상',std:'대한민국약전',result:'적합'},{item:'확인시험',std:'기준일치',result:'적합'},{item:'건조감량',std:'13.0% 이하',result:'적합'},{item:'회분',std:'5.0% 이하',result:'적합'},{item:'이산화황',std:'30ppm 이하',result:'적합'},{item:'중금속',std:'30ppm 이하',result:'적합'},{item:'잔류농약',std:'기준 이하',result:'적합'}]},
+];
+
+function renderHerbs() {
+  document.getElementById('herbCards').innerHTML = HERBS.map((h,i) => `
+    <div class="herb-card" id="card-${i}">
+      <div class="herb-card-header">
+        <div class="herb-icon">${CAPSULE_SVG}</div>
+        <div class="herb-info">
+          <div class="herb-name">${h.name} <span style="font-size:12px;color:var(--text-muted);font-weight:400;">${h.hanja}</span></div>
+          <div class="herb-tags">
+            <span class="origin-tag">${h.flag} ${h.origin}산</span>
+            <span class="grade-tag">✓ 규격품</span>
+            <span class="code-tag">주성분코드 ${h.code}</span>
+          </div>
+        </div>
+      </div>
+      <div class="cert-toggle" onclick="toggleCard(${i})">
+        <div class="cert-toggle-label">품질검사 성적서 확인하기</div>
+        <div class="chevron">▼</div>
+      </div>
+      <div class="herb-detail">
+        <div class="cert-info">
+          <span><strong>검사기관</strong> ${h.lab}</span>
+          <span><strong>성적서번호</strong> ${h.certNo}</span>
+        </div>
+        <div class="detail-label">품질검사 결과 &nbsp;<span style="color:var(--pass);">전항목 적합</span></div>
+        <table class="quality-table">
+          <tr><th>항목</th><th>기준</th><th>결과</th></tr>
+          ${h.quality.map(q=>`<tr><td>${q.item}</td><td>${q.std}</td><td><span class="pass-badge">✓ ${q.result}</span></td></tr>`).join('')}
+        </table>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCard(i) { document.getElementById('card-'+i).classList.toggle('open'); }
+
+function showPage(id, tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tab.classList.add('active');
+}
+
+renderHerbs();
+</script>
+</body>
+</html>
