@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>한약(재) 정보 공급 사업 만족도 설문</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0A2340;
+    --green:  #1D9E75;
+    --gold:   #C9A84C;
+    --light:  #F5F3EE;
+    --border: #E2DDD4;
+    --text:   #2D3748;
+    --muted:  #718096;
+    --white:  #FFFFFF;
+    --green-light: #EBF7F2;
+    --red:    #E53E3E;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--light);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .progress-bar-wrap {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .progress-label { font-size: 11px; color: var(--muted); white-space: nowrap; min-width: 60px; }
+  .progress-track {
+    flex: 1; height: 6px; background: var(--border);
+    border-radius: 3px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--green);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-pct { font-size: 11px; color: var(--green); font-weight: 700; min-width: 32px; text-align: right; }
+
+  .survey-header {
+    background: var(--navy);
+    padding: 36px 24px 30px;
+    position: relative; overflow: hidden;
+  }
+  .survey-header::before {
+    content: '';
+    position: absolute; right: -40px; top: -40px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(29,158,117,0.12);
+  }
+  .survey-header::after {
+    content: '';
+    position: absolute; right: 40px; bottom: -20px;
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(201,168,76,0.1);
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(201,168,76,0.18);
+    border: 1px solid rgba(201,168,76,0.35);
+    color: var(--gold); font-size: 10px; font-weight: 500;
+    padding: 4px 10px; border-radius: 20px;
+    margin-bottom: 14px; position: relative; z-index: 1;
+  }
+  .header-badge::before { content: '●'; font-size: 6px; }
+  .survey-header h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px; font-weight: 700; color: var(--white);
+    line-height: 1.4; margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .survey-header h1 em { font-style: normal; color: var(--green); }
+  .survey-header p {
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    line-height: 1.7; position: relative; z-index: 1;
+  }
+
+  .notice-box {
+    margin: 20px 16px 0;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px; padding: 14px 16px;
+    font-size: 11.5px; color: #4A5568; line-height: 1.7;
+  }
+  .notice-box strong { color: var(--navy); }
+
+  .survey-wrap { padding: 20px 16px 80px; max-width: 600px; margin: 0 auto; }
+
+  .section-block {
+    background: var(--white);
+    border-radius: 14px; border: 1px solid var(--border);
+    margin-bottom: 16px; overflow: hidden;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .section-block.visible { opacity: 1; transform: translateY(0); }
+
+  .section-head {
+    background: var(--navy);
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--green); color: var(--white);
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-head h2 { font-size: 13.5px; font-weight: 700; color: var(--white); }
+  .section-head span { font-size: 10px; color: rgba(255,255,255,0.45); margin-left: auto; }
+
+  .section-body { padding: 18px 18px 20px; }
+
+  .q-block { margin-bottom: 22px; }
+  .q-block:last-child { margin-bottom: 0; }
+
+  .q-label {
+    font-size: 13px; font-weight: 600; color: var(--navy);
+    margin-bottom: 10px; line-height: 1.5;
+    display: flex; gap: 6px;
+  }
+  .q-num {
+    color: var(--green); font-weight: 700;
+    flex-shrink: 0;
+  }
+  .required { color: var(--red); font-size: 11px; margin-left: 2px; }
+
+  .scale-wrap {
+    display: flex; gap: 0;
+    border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .scale-opt {
+    flex: 1; text-align: center;
+    position: relative;
+  }
+  .scale-opt input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .scale-opt label {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 10px 4px 8px;
+    cursor: pointer;
+    border-right: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .scale-opt:last-child label { border-right: none; }
+  .scale-opt label .s-emoji { font-size: 18px; margin-bottom: 3px; line-height: 1; }
+  .scale-opt label .s-num  { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .scale-opt label .s-text { font-size: 9px; color: var(--muted); margin-top: 1px; line-height: 1.2; }
+  .scale-opt input:checked + label {
+    background: var(--green-light);
+  }
+  .scale-opt input:checked + label .s-num  { color: var(--green); }
+  .scale-opt input:checked + label .s-text { color: var(--green); }
+
+  .choice-list { display: flex; flex-direction: column; gap: 8px; }
+  .choice-item {
+    display: flex; align-items: center; gap: 10px;
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .choice-item:hover { border-color: var(--green); background: #fafffe; }
+  .choice-item input { display: none; }
+  .choice-dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    transition: border-color 0.15s, background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .choice-dot::after {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--white); opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .choice-item.selected { border-color: var(--green); background: var(--green-light); }
+  .choice-item.selected .choice-dot { border-color: var(--green); background: var(--green); }
+  .choice-item.selected .choice-dot::after { opacity: 1; }
+
+  .choice-check .choice-dot { border-radius: 4px; }
+
+  .choice-text { font-size: 12.5px; color: var(--text); line-height: 1.4; }
+
+  textarea, input[type=text] {
+    width: 100%; border: 1px solid var(--border); border-radius: 8px;
+    padding: 11px 13px; font-size: 13px; font-family: inherit;
+    color: var(--text); resize: vertical; outline: none;
+    transition: border-color 0.15s;
+    background: #fafaf8;
+  }
+  textarea:focus, input[type=text]:focus { border-color: var(--green); background: var(--white); }
+  textarea { min-height: 80px; }
+
+  .exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .exp-item {
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 12px; cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .exp-item input { display: none; }
+  .exp-item .e-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+  .exp-item .e-label { font-size: 11.5px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+  .exp-item .e-sub   { font-size: 10px; color: var(--muted); line-height: 1.35; }
+  .exp-item.selected {
+    border-color: var(--green); background: var(--green-light);
+  }
+  .exp-item.selected .e-label { color: var(--green); }
+
+  .submit-area {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--white); border-top: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex; gap: 10px; justify-content: center;
+    z-index: 100;
+  }
+  .btn-submit {
+    flex: 1; max-width: 400px;
+    background: var(--navy); color: var(--white);
+    border: none; border-radius: 10px;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-submit:hover { background: #0d2d52; }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit:disabled { background: var(--muted); cursor: not-allowed; }
+
+  .complete-screen {
+    display: none; text-align: center;
+    padding: 60px 24px;
+    background: var(--white); margin: 20px 16px;
+    border-radius: 16px; border: 1px solid var(--border);
+  }
+  .complete-icon { font-size: 52px; margin-bottom: 16px; }
+  .complete-screen h2 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px; color: var(--navy); margin-bottom: 10px;
+  }
+  .complete-screen p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .complete-badge {
+    display: inline-block; margin-top: 20px;
+    background: var(--green-light); border: 1px solid var(--green);
+    color: var(--green); font-size: 11.5px; font-weight: 600;
+    padding: 8px 16px; border-radius: 20px;
+  }
+
+  .err-msg { font-size: 11px; color: var(--red); margin-top: 5px; display: none; }
+  .q-block.has-error .scale-wrap,
+  .q-block.has-error .choice-list { border-color: var(--red); border-radius: 10px; }
+  .q-block.has-error .err-msg { display: block; }
+
+  .q-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+  .hidden-skip { display: none !important; }
+
+  #consentBlock.has-error .choice-item { border-color: var(--red); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar-wrap">
+  <span class="progress-label" id="progressLabel">0 / 23</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+</div>
+
+<div class="survey-header">
+  <div class="header-badge">한국한의약진흥원 공모사업 · 2026</div>
+  <h1>한약(재) 정보 공급 사업<br><em>소비자 만족도 조사</em></h1>
+  <p>본 설문은 한약 정보 서비스 개선을 위한 자료로만 활용됩니다.<br>솔직한 의견을 남겨주시면 큰 도움이 됩니다. (소요 시간 약 6분)</p>
+</div>
+
+<div class="notice-box">
+  📋 <strong>설문 안내:</strong> 이 설문은 <strong>첩약 건강보험 시범사업</strong>을 통해 한약(첩약)을 처방받으신 환자분을 대상으로 합니다. 응답 내용은 서비스 품질 향상을 위한 통계 분석 목적으로만 활용되며, 설문에 참여해 주신 모든 분께 <strong>감사의 의미로 1만 원 상당의 기프티콘</strong>을 드립니다.
+</div>
+
+<div class="survey-wrap" id="surveyWrap">
+
+  <div class="section-block visible" id="consentBlock">
+    <div class="section-head">
+      <div class="section-num">✓</div>
+      <h2>개인정보 수집·이용 동의</h2>
+      <span>필수 동의 사항</span>
+    </div>
+    <div class="section-body">
+
+      <p style="font-size:12px; font-weight:700; color:var(--navy); margin-bottom:6px;">① 설문조사 목적 (필수)</p>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.7; margin-bottom:12px;">
+        <strong style="color:var(--navy);">수집 항목</strong>: 설문 응답 내용&nbsp;/&nbsp;
+        <strong style="color:var(--navy);">수집 목적</strong>: 한약(재) 정보 공급 사업 만족도 분석 및 서비스 개선&nbsp;/&nbsp;
+        <strong style="color:var(--navy);">보유 기간</strong>: 사업 종료 후 파기<br>
+        수집된 정보는 <strong style="color:var(--navy);">본 공모사업 목적 외에는 사용되지 않으며</strong>, 설문 응답 내용은 <strong style="color:var(--navy);">개인을 특정할 수 없는 형태</strong>로 처리·관리됩니다.<br>
+        동의하지 않으실 경우 설문에 참여하실 수 없습니다.
+      </p>
+      <label class="choice-item" id="consentItem1" style="justify-content:flex-start;">
+        <input type="checkbox" id="consentCheckbox1" style="display:none;">
+        <span class="choice-dot"></span>
+        <span class="choice-text" style="font-weight:600; color:var(--navy);">설문조사 목적의 개인정보 수집·이용에 동의합니다.<span class="required">*</span></span>
+      </label>
+      <div class="err-msg" id="consentErr1">필수 동의 항목입니다.</div>
+
+      <hr class="q-divider">
+
+      <p style="font-size:12px; font-weight:700; color:var(--navy); margin-bottom:6px;">② 기프티콘(1만 원 상당) 발송 목적 (선택)</p>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.7; margin-bottom:12px;">
+        <strong style="color:var(--navy);">수집 항목</strong>: 휴대전화번호&nbsp;/&nbsp;
+        <strong style="color:var(--navy);">수집 목적</strong>: 설문 참여 사은품(1만 원 상당 기프티콘) 발송&nbsp;/&nbsp;
+        <strong style="color:var(--navy);">보유 기간</strong>: 발송 완료 후 즉시 파기(최대 1개월 이내)<br>
+        수집된 휴대전화번호는 <strong style="color:var(--navy);">기프티콘 발송 목적으로만 사용되며, 그 외 어떠한 목적으로도 절대 이용되지 않습니다.</strong><br>
+        동의하지 않으셔도 설문 참여는 가능하나, 이 경우 기프티콘을 받으실 수 없습니다.
+      </p>
+      <label class="choice-item" id="consentItem2" style="justify-content:flex-start;">
+        <input type="checkbox" id="consentCheckbox2" style="display:none;">
+        <span class="choice-dot"></span>
+        <span class="choice-text" style="font-weight:600; color:var(--navy);">기프티콘 발송을 위한 휴대전화번호 수집·이용에 동의합니다.</span>
+      </label>
+
+      <div id="phoneWrap" style="display:none; margin-top:12px;">
+        <input type="text" id="phoneInput" placeholder="휴대전화번호를 입력해 주세요 (예: 010-1234-5678)">
+        <div class="err-msg" id="phoneErr">기프티콘을 받으시려면 휴대전화번호를 입력해 주세요.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 섹션 1: 기본 정보 ══ -->
+  <div class="section-block" data-section="1">
+    <div class="section-head">
+      <div class="section-num">1</div>
+      <h2>기본 정보</h2>
+      <span>인구통계학적 배경</span>
+    </div>
+    <div class="section-body">
+
+      <div class="q-block" data-qid="q1" data-required="true">
+        <div class="q-label"><span class="q-num">Q1.</span>귀하의 성별은 어떻게 되십니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q1" value="남성"><span class="choice-dot"></span><span class="choice-text">남성</span></label>
+          <label class="choice-item"><input type="radio" name="q1" value="여성"><span class="choice-dot"></span><span class="choice-text">여성</span></label>
+          <label class="choice-item"><input type="radio" name="q1" value="응답하지 않음"><span class="choice-dot"></span><span class="choice-text">응답하지 않음</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q2" data-required="true">
+        <div class="q-label"><span class="q-num">Q2.</span>귀하의 연령대는 어떻게 되십니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q2" value="10대 이하"><span class="choice-dot"></span><span class="choice-text">10대 이하</span></label>
+          <label class="choice-item"><input type="radio" name="q2" value="20대"><span class="choice-dot"></span><span class="choice-text">20대</span></label>
+          <label class="choice-item"><input type="radio" name="q2" value="30대"><span class="choice-dot"></span><span class="choice-text">30대</span></label>
+          <label class="choice-item"><input type="radio" name="q2" value="40대"><span class="choice-dot"></span><span class="choice-text">40대</span></label>
+          <label class="choice-item"><input type="radio" name="q2" value="50대"><span class="choice-dot"></span><span class="choice-text">50대</span></label>
+          <label class="choice-item"><input type="radio" name="q2" value="60대 이상"><span class="choice-dot"></span><span class="choice-text">60대 이상</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q3" data-required="true">
+        <div class="q-label"><span class="q-num">Q3.</span>한의원 방문 경험은 어느 정도이십니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q3" value="처음 방문"><span class="choice-dot"></span><span class="choice-text">처음 방문</span></label>
+          <label class="choice-item"><input type="radio" name="q3" value="가끔 방문 (연 1~2회)"><span class="choice-dot"></span><span class="choice-text">가끔 방문 (연 1~2회)</span></label>
+          <label class="choice-item"><input type="radio" name="q3" value="정기적 방문 (연 4회 이상)"><span class="choice-dot"></span><span class="choice-text">정기적 방문 (연 4회 이상)</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 섹션 2: 첩약 건강보험 시범사업 확대 ══ -->
+  <div class="section-block" data-section="2">
+    <div class="section-head">
+      <div class="section-num">2</div>
+      <h2>첩약 건강보험 시범사업 확대</h2>
+      <span>시범사업 및 정보서비스 확대 의견</span>
+    </div>
+    <div class="section-body">
+
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.7; margin-bottom:18px;">
+        귀하께서 받으신 한약은 <strong style="color:var(--navy);">첩약 건강보험 시범사업</strong>을 통해 조제된 첩약(탕약)입니다. 아래 문항은 시범사업 인지 경로와 확대 필요성에 대한 귀하의 의견을 묻습니다.
+      </p>
+
+      <div class="q-block" data-qid="q4" data-required="true">
+        <div class="q-label"><span class="q-num">Q4.</span>귀하는 첩약 건강보험 시범사업을 어떻게 알게 되셨습니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q4" value="한의원 원장님·직원의 안내"><span class="choice-dot"></span><span class="choice-text">한의원 원장님·직원의 안내</span></label>
+          <label class="choice-item"><input type="radio" name="q4" value="원내 홍보물(리플릿·POP·포스터)"><span class="choice-dot"></span><span class="choice-text">원내 홍보물(리플릿·POP·포스터)</span></label>
+          <label class="choice-item"><input type="radio" name="q4" value="가족·지인 소개"><span class="choice-dot"></span><span class="choice-text">가족·지인 소개</span></label>
+          <label class="choice-item"><input type="radio" name="q4" value="언론·인터넷 기사"><span class="choice-dot"></span><span class="choice-text">언론·인터넷 기사</span></label>
+          <label class="choice-item"><input type="radio" name="q4" value="건강보험공단·정부 홍보"><span class="choice-dot"></span><span class="choice-text">건강보험공단·정부 홍보</span></label>
+          <label class="choice-item"><input type="radio" name="q4" value="기타"><span class="choice-dot"></span><span class="choice-text">기타</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q5" data-required="true">
+        <div class="q-label"><span class="q-num">Q5.</span>귀하가 이용하신 첩약 건강보험 시범사업이 더 많은 질환과 한의원으로 확대될 필요가 있다고 생각하십니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q5" id="q5-1" value="1"><label for="q5-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">전혀<br>아니다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q5" id="q5-2" value="2"><label for="q5-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">아니다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q5" id="q5-3" value="3"><label for="q5-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q5" id="q5-4" value="4"><label for="q5-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">그렇다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q5" id="q5-5" value="5"><label for="q5-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>그렇다</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q6" data-required="true">
+        <div class="q-label"><span class="q-num">Q6.</span>첩약 건강보험 시범사업이 확대된다면, 지금과 같은 원산지·품질·복약 정보 제공 서비스도 함께 확대되기를 원하십니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q6" id="q6-1" value="1"><label for="q6-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">전혀<br>아니다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q6" id="q6-2" value="2"><label for="q6-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">아니다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q6" id="q6-3" value="3"><label for="q6-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q6" id="q6-4" value="4"><label for="q6-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">그렇다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q6" id="q6-5" value="5"><label for="q6-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>그렇다</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 섹션 3: 원내 홍보물 ══ -->
+  <div class="section-block" data-section="3">
+    <div class="section-head">
+      <div class="section-num">3</div>
+      <h2>원내 홍보물 (리플릿·POP·포스터)</h2>
+      <span>한의원 내 비치 자료</span>
+    </div>
+    <div class="section-body">
+
+      <div class="q-block" data-qid="q7" data-required="true">
+        <div class="q-label"><span class="q-num">Q7.</span>한의원 내 비치된 홍보물(리플릿·POP·포스터)을 확인하셨습니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q7" value="자세히 읽었다"><span class="choice-dot"></span><span class="choice-text">자세히 읽었다</span></label>
+          <label class="choice-item"><input type="radio" name="q7" value="간략히 훑어봤다"><span class="choice-dot"></span><span class="choice-text">간략히 훑어봤다</span></label>
+          <label class="choice-item"><input type="radio" name="q7" value="존재는 알았지만 보지 않았다"><span class="choice-dot"></span><span class="choice-text">존재는 알았지만 보지 않았다</span></label>
+          <label class="choice-item"><input type="radio" name="q7" value="보지 못했다"><span class="choice-dot"></span><span class="choice-text">보지 못했다</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q8" data-required="true">
+        <div class="q-label"><span class="q-num">Q8.</span>홍보물을 통해 사업 내용을 이해하는 데 도움이 되었습니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q8" id="q8-1" value="1"><label for="q8-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">전혀<br>아니다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q8" id="q8-2" value="2"><label for="q8-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">아니다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q8" id="q8-3" value="3"><label for="q8-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q8" id="q8-4" value="4"><label for="q8-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">그렇다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q8" id="q8-5" value="5"><label for="q8-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>그렇다</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q9" data-required="false">
+        <div class="q-label"><span class="q-num">Q9.</span>홍보물에서 가장 유용했던 정보는 무엇입니까? (중복 응답 가능)</div>
+        <div class="choice-list choice-check" data-type="checkbox">
+          <label class="choice-item"><input type="checkbox" name="q9" value="QR코드 사용 방법"><span class="choice-dot"></span><span class="choice-text">QR코드 사용 방법</span></label>
+          <label class="choice-item"><input type="checkbox" name="q9" value="확인 가능한 정보 항목 안내"><span class="choice-dot"></span><span class="choice-text">확인 가능한 정보 항목 안내 (원산지·품질·조제 등)</span></label>
+          <label class="choice-item"><input type="checkbox" name="q9" value="사업 목적과 주관기관 안내"><span class="choice-dot"></span><span class="choice-text">사업 목적과 주관기관 안내</span></label>
+          <label class="choice-item"><input type="checkbox" name="q9" value="개인정보 보호 안내"><span class="choice-dot"></span><span class="choice-text">개인정보 보호 안내</span></label>
+          <label class="choice-item"><input type="checkbox" name="q9" value="없음 / 잘 모르겠다"><span class="choice-dot"></span><span class="choice-text">없음 / 잘 모르겠다</span></label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 섹션 4: 동봉 정보안내지 ══ -->
+  <div class="section-block" data-section="4">
+    <div class="section-head">
+      <div class="section-num">4</div>
+      <h2>동봉 정보안내지</h2>
+      <span>한약과 함께 받은 정보안내지</span>
+    </div>
+    <div class="section-body">
+
+      <div class="q-block" data-qid="q10" data-required="true">
+        <div class="q-label"><span class="q-num">Q10.</span>한약 수령 시 동봉된 정보안내지를 확인하셨습니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q10" value="처음부터 끝까지 읽었다"><span class="choice-dot"></span><span class="choice-text">처음부터 끝까지 읽었다</span></label>
+          <label class="choice-item"><input type="radio" name="q10" value="QR코드 부분만 확인했다"><span class="choice-dot"></span><span class="choice-text">QR코드 부분만 확인했다</span></label>
+          <label class="choice-item"><input type="radio" name="q10" value="잠깐 훑어봤다"><span class="choice-dot"></span><span class="choice-text">잠깐 훑어봤다</span></label>
+          <label class="choice-item"><input type="radio" name="q10" value="확인하지 않았다"><span class="choice-dot"></span><span class="choice-text">확인하지 않았다</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q11" data-required="true">
+        <div class="q-label"><span class="q-num">Q11.</span>정보안내지의 내용 구성(약재명·원산지·복약 안내 등)은 이해하기 얼마나 쉬웠습니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q11" id="q11-1" value="1"><label for="q11-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">매우<br>어려움</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q11" id="q11-2" value="2"><label for="q11-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">어려움</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q11" id="q11-3" value="3"><label for="q11-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q11" id="q11-4" value="4"><label for="q11-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">쉬움</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q11" id="q11-5" value="5"><label for="q11-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>쉬움</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q12" data-required="true">
+        <div class="q-label"><span class="q-num">Q12.</span>정보안내지의 디자인·가독성은 어떠하였습니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q12" id="q12-1" value="1"><label for="q12-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">매우<br>불만족</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q12" id="q12-2" value="2"><label for="q12-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">불만족</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q12" id="q12-3" value="3"><label for="q12-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q12" id="q12-4" value="4"><label for="q12-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">만족</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q12" id="q12-5" value="5"><label for="q12-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>만족</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 섹션 5: QR코드 웹페이지 ══ -->
+  <div class="section-block" data-section="5">
+    <div class="section-head">
+      <div class="section-num">5</div>
+      <h2>QR코드 한약 정보 웹페이지</h2>
+      <span>직접 스캔 후 조회 경험</span>
+    </div>
+    <div class="section-body">
+
+      <div class="q-block" data-qid="q13" data-required="true">
+        <div class="q-label"><span class="q-num">Q13.</span>QR코드를 스캔하여 한약 정보 웹페이지에 접속하셨습니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q13" value="접속하여 전체 내용을 확인했다"><span class="choice-dot"></span><span class="choice-text">접속하여 전체 내용을 확인했다</span></label>
+          <label class="choice-item"><input type="radio" name="q13" value="접속했지만 일부만 확인했다"><span class="choice-dot"></span><span class="choice-text">접속했지만 일부만 확인했다</span></label>
+          <label class="choice-item"><input type="radio" name="q13" value="접속했지만 잘 몰라서 종료했다"><span class="choice-dot"></span><span class="choice-text">접속했지만 잘 몰라서 종료했다</span></label>
+          <label class="choice-item"><input type="radio" name="q13" value="접속하지 않았다"><span class="choice-dot"></span><span class="choice-text">접속하지 않았다</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q14" data-required="true">
+        <div class="q-label"><span class="q-num">Q14.</span>QR코드 스캔 및 본인인증 절차는 얼마나 편리하였습니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q14" id="q14-1" value="1"><label for="q14-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">매우<br>불편</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q14" id="q14-2" value="2"><label for="q14-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">불편</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q14" id="q14-3" value="3"><label for="q14-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q14" id="q14-4" value="4"><label for="q14-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">편리</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q14" id="q14-5" value="5"><label for="q14-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>편리</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q15" data-required="true">
+        <div class="q-label"><span class="q-num">Q15.</span>웹페이지에서 확인한 정보 중 가장 유용했던 항목은 무엇입니까? (중복 응답 가능)<span class="required">*</span></div>
+        <div class="choice-list choice-check" data-type="checkbox">
+          <label class="choice-item"><input type="checkbox" name="q15" value="한약재 원산지 정보"><span class="choice-dot"></span><span class="choice-text">한약재 원산지 정보</span></label>
+          <label class="choice-item"><input type="checkbox" name="q15" value="hGMP 품질 성적서·검사 결과"><span class="choice-dot"></span><span class="choice-text">hGMP 품질 성적서·검사 결과</span></label>
+          <label class="choice-item"><input type="checkbox" name="q15" value="처방 구성약재 정보"><span class="choice-dot"></span><span class="choice-text">처방 구성약재 정보</span></label>
+          <label class="choice-item"><input type="checkbox" name="q15" value="공동조제실 조제 공정 정보"><span class="choice-dot"></span><span class="choice-text">공동조제실 조제 공정 정보</span></label>
+          <label class="choice-item"><input type="checkbox" name="q15" value="복약 안내(복용법·보관법)"><span class="choice-dot"></span><span class="choice-text">복약 안내 (복용법·보관법)</span></label>
+          <label class="choice-item"><input type="checkbox" name="q15" value="특별히 없다"><span class="choice-dot"></span><span class="choice-text">특별히 없다</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q16" data-required="true">
+        <div class="q-label"><span class="q-num">Q16.</span>웹페이지의 화면 구성과 사용 편의성은 어떠하였습니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q16" id="q16-1" value="1"><label for="q16-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">매우<br>불편</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q16" id="q16-2" value="2"><label for="q16-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">불편</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q16" id="q16-3" value="3"><label for="q16-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q16" id="q16-4" value="4"><label for="q16-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">편리</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q16" id="q16-5" value="5"><label for="q16-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>편리</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q17" data-required="true">
+        <div class="q-label"><span class="q-num">Q17.</span>한약 정보 확인용 QR코드는 어디에 부착되어 있을 때 확인 및 사용이 가장 편리하다고 생각하십니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q17" value="동봉 정보안내지"><span class="choice-dot"></span><span class="choice-text">동봉 정보안내지</span></label>
+          <label class="choice-item"><input type="radio" name="q17" value="약박스 겉면"><span class="choice-dot"></span><span class="choice-text">약박스 겉면</span></label>
+          <label class="choice-item"><input type="radio" name="q17" value="복용법(안내문)"><span class="choice-dot"></span><span class="choice-text">복용법(안내문)</span></label>
+          <label class="choice-item"><input type="radio" name="q17" value="한의원 내 게시물(포스터 등)"><span class="choice-dot"></span><span class="choice-text">한의원 내 게시물(포스터 등)</span></label>
+          <label class="choice-item"><input type="radio" name="q17" value="기타"><span class="choice-dot"></span><span class="choice-text">기타</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 섹션 6: 전반적 만족도 및 영향 ══ -->
+  <div class="section-block" data-section="6">
+    <div class="section-head">
+      <div class="section-num">6</div>
+      <h2>전반적 만족도 및 영향</h2>
+      <span>종합 평가</span>
+    </div>
+    <div class="section-body">
+
+      <div class="q-block" data-qid="q18" data-required="true">
+        <div class="q-label"><span class="q-num">Q18.</span>이 서비스에 대한 전반적인 만족도는 어느 정도입니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q18" id="q18-1" value="1"><label for="q18-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">매우<br>불만족</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q18" id="q18-2" value="2"><label for="q18-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">불만족</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q18" id="q18-3" value="3"><label for="q18-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q18" id="q18-4" value="4"><label for="q18-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">만족</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q18" id="q18-5" value="5"><label for="q18-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>만족</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q19" data-required="true">
+        <div class="q-label"><span class="q-num">Q19.</span>이 서비스가 한약에 대한 신뢰도를 높이는 데 도움이 되었습니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q19" id="q19-1" value="1"><label for="q19-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">전혀<br>아니다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q19" id="q19-2" value="2"><label for="q19-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">아니다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q19" id="q19-3" value="3"><label for="q19-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q19" id="q19-4" value="4"><label for="q19-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">그렇다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q19" id="q19-5" value="5"><label for="q19-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>그렇다</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q20" data-required="true">
+        <div class="q-label"><span class="q-num">Q20.</span>이 서비스 경험이 향후 한의원 재방문 의향에 영향을 미쳤습니까?<span class="required">*</span></div>
+        <div class="choice-list" data-type="radio">
+          <label class="choice-item"><input type="radio" name="q20" value="긍정적 영향을 주었다 (재방문 의향 높아짐)"><span class="choice-dot"></span><span class="choice-text">긍정적 영향을 주었다 (재방문 의향 높아짐)</span></label>
+          <label class="choice-item"><input type="radio" name="q20" value="영향 없다 (변화 없음)"><span class="choice-dot"></span><span class="choice-text">영향 없다 (변화 없음)</span></label>
+          <label class="choice-item"><input type="radio" name="q20" value="부정적 영향을 주었다 (재방문 의향 낮아짐)"><span class="choice-dot"></span><span class="choice-text">부정적 영향을 주었다 (재방문 의향 낮아짐)</span></label>
+          <label class="choice-item"><input type="radio" name="q20" value="잘 모르겠다"><span class="choice-dot"></span><span class="choice-text">잘 모르겠다</span></label>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q21" data-required="true">
+        <div class="q-label"><span class="q-num">Q21.</span>이 서비스를 주변(가족·지인)에게 추천할 의향이 있으십니까?<span class="required">*</span></div>
+        <div class="scale-wrap">
+          <div class="scale-opt"><input type="radio" name="q21" id="q21-1" value="1"><label for="q21-1"><span class="s-emoji">😞</span><span class="s-num">1</span><span class="s-text">전혀<br>없다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q21" id="q21-2" value="2"><label for="q21-2"><span class="s-emoji">😕</span><span class="s-num">2</span><span class="s-text">없다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q21" id="q21-3" value="3"><label for="q21-3"><span class="s-emoji">😐</span><span class="s-num">3</span><span class="s-text">보통</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q21" id="q21-4" value="4"><label for="q21-4"><span class="s-emoji">😊</span><span class="s-num">4</span><span class="s-text">있다</span></label></div>
+          <div class="scale-opt"><input type="radio" name="q21" id="q21-5" value="5"><label for="q21-5"><span class="s-emoji">😄</span><span class="s-num">5</span><span class="s-text">매우<br>있다</span></label></div>
+        </div>
+        <div class="err-msg">필수 항목입니다.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 섹션 7: 개선 의견 ══ -->
+  <div class="section-block" data-section="7">
+    <div class="section-head">
+      <div class="section-num">7</div>
+      <h2>개선 의견</h2>
+      <span>서비스 향상을 위한 제안</span>
+    </div>
+    <div class="section-body">
+
+      <div class="q-block" data-qid="q22" data-required="false">
+        <div class="q-label"><span class="q-num">Q22.</span>서비스를 이용하면서 불편하거나 아쉬웠던 점이 있으십니까? (중복 응답 가능)</div>
+        <div class="choice-list choice-check" data-type="checkbox">
+          <label class="choice-item"><input type="checkbox" name="q22" value="QR코드 스캔이 잘 되지 않았다"><span class="choice-dot"></span><span class="choice-text">QR코드 스캔이 잘 되지 않았다</span></label>
+          <label class="choice-item"><input type="checkbox" name="q22" value="본인인증 절차가 번거로웠다"><span class="choice-dot"></span><span class="choice-text">본인인증 절차가 번거로웠다</span></label>
+          <label class="choice-item"><input type="checkbox" name="q22" value="웹페이지 내용이 이해하기 어려웠다"><span class="choice-dot"></span><span class="choice-text">웹페이지 내용이 이해하기 어려웠다</span></label>
+          <label class="choice-item"><input type="checkbox" name="q22" value="원하는 정보가 없었다"><span class="choice-dot"></span><span class="choice-text">원하는 정보가 없었다</span></label>
+          <label class="choice-item"><input type="checkbox" name="q22" value="홍보물 글씨가 작거나 읽기 어려웠다"><span class="choice-dot"></span><span class="choice-text">홍보물 글씨가 작거나 읽기 어려웠다</span></label>
+          <label class="choice-item"><input type="checkbox" name="q22" value="특별히 없다"><span class="choice-dot"></span><span class="choice-text">특별히 없다</span></label>
+        </div>
+      </div>
+
+      <hr class="q-divider">
+
+      <div class="q-block" data-qid="q23" data-required="false">
+        <div class="q-label"><span class="q-num">Q23.</span>향후 서비스 개선을 위해 추가로 원하는 기능이나 정보가 있으시면 자유롭게 적어주세요.</div>
+        <textarea name="q23" placeholder="예) 한약재 사진 추가, 효능 정보 제공, 영문 버전 지원 등 자유롭게 적어주세요."></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="complete-screen" id="completeScreen">
+    <div class="complete-icon">🌿</div>
+    <h2>설문 응답이 완료되었습니다</h2>
+    <p>소중한 의견을 남겨주셔서 감사합니다.<br>응답해 주신 내용은 한약 정보 서비스의 품질 향상을<br>위해 소중히 활용하겠습니다.</p>
+    <span class="complete-badge">한국한의약진흥원 · 한약(재) 정보 공급 사업</span>
+  </div>
+
+</div>
+
+<div class="submit-area" id="submitArea">
+  <button class="btn-submit" id="btnSubmit" onclick="handleSubmit()">설문 제출하기</button>
+</div>
+
+<script>
+  // ── 조건부 분기(스킵) 규칙 ──
+  const SKIP_RULES = [
+    { trigger: 'q7',  skipValues: ['존재는 알았지만 보지 않았다', '보지 못했다'], targets: ['q8'] },
+    { trigger: 'q10', skipValues: ['확인하지 않았다'], targets: ['q11', 'q12'] },
+    { trigger: 'q13', skipValues: ['접속하지 않았다'], targets: ['q14', 'q15', 'q16', 'q17'] }
+  ];
+
+  function setBlockSkipped(qblock, skip) {
+    if (!qblock) return;
+    qblock.classList.toggle('hidden-skip', skip);
+    const prev = qblock.previousElementSibling;
+    if (prev && prev.classList.contains('q-divider')) {
+      prev.classList.toggle('hidden-skip', skip);
+    }
+    if (skip) {
+      qblock.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(inp => inp.checked = false);
+      qblock.querySelectorAll('.choice-item.selected').forEach(el => el.classList.remove('selected'));
+      qblock.classList.remove('has-error');
+    }
+  }
+
+  function applySkipLogic() {
+    SKIP_RULES.forEach(rule => {
+      const checked = document.querySelector(`input[name="${rule.trigger}"]:checked`);
+      const shouldSkip = !!checked && rule.skipValues.includes(checked.value);
+      rule.targets.forEach(qid => {
+        setBlockSkipped(document.querySelector(`.q-block[data-qid="${qid}"]`), shouldSkip);
+      });
+    });
+    updateProgress();
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.section-block').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('.choice-list').forEach(list => {
+    const type = list.dataset.type;
+    list.querySelectorAll('.choice-item').forEach(item => {
+      item.addEventListener('click', () => {
+        if (type === 'radio') {
+          list.querySelectorAll('.choice-item').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          item.querySelector('input').checked = true;
+        } else {
+          item.classList.toggle('selected');
+          item.querySelector('input').checked = item.classList.contains('selected');
+        }
+        item.closest('.q-block').classList.remove('has-error');
+        applySkipLogic();
+      });
+    });
+  });
+
+  document.querySelectorAll('.scale-wrap input[type=radio]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      inp.closest('.q-block').classList.remove('has-error');
+      updateProgress();
+    });
+  });
+
+  const consentItem1 = document.getElementById('consentItem1');
+  const consentCheckbox1 = document.getElementById('consentCheckbox1');
+  consentItem1.addEventListener('click', () => {
+    consentCheckbox1.checked = !consentCheckbox1.checked;
+    consentItem1.classList.toggle('selected', consentCheckbox1.checked);
+    document.getElementById('consentBlock').classList.remove('has-error');
+    document.getElementById('consentErr1').style.display = 'none';
+  });
+
+  const consentItem2 = document.getElementById('consentItem2');
+  const consentCheckbox2 = document.getElementById('consentCheckbox2');
+  const phoneWrap = document.getElementById('phoneWrap');
+  const phoneInput = document.getElementById('phoneInput');
+  const phoneErr = document.getElementById('phoneErr');
+  consentItem2.addEventListener('click', () => {
+    consentCheckbox2.checked = !consentCheckbox2.checked;
+    consentItem2.classList.toggle('selected', consentCheckbox2.checked);
+    phoneWrap.style.display = consentCheckbox2.checked ? 'block' : 'none';
+    if (!consentCheckbox2.checked) {
+      phoneInput.value = '';
+      phoneErr.style.display = 'none';
+    }
+  });
+  phoneInput.addEventListener('input', () => { phoneErr.style.display = 'none'; });
+
+  function getActiveBlocks() {
+    return Array.from(document.querySelectorAll('.q-block[data-qid]')).filter(b => !b.classList.contains('hidden-skip'));
+  }
+
+  function countAnswered() {
+    let count = 0;
+    getActiveBlocks().forEach(qblock => {
+      const radios = qblock.querySelectorAll('input[type=radio]');
+      const checks = qblock.querySelectorAll('input[type=checkbox]:checked');
+      const text   = qblock.querySelector('textarea, input[type=text]');
+      if ([...radios].some(r => r.checked)) count++;
+      else if (checks.length > 0) count++;
+      else if (text && text.value.trim()) count++;
+    });
+    return count;
+  }
+
+  function updateProgress() {
+    const active = getActiveBlocks();
+    const total = active.length;
+    const answered = countAnswered();
+    const pct = total ? Math.round((answered / total) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressLabel').textContent = answered + ' / ' + total;
+  }
+
+  function handleSubmit() {
+    if (!consentCheckbox1.checked) {
+      document.getElementById('consentBlock').classList.add('has-error');
+      document.getElementById('consentErr1').style.display = 'block';
+      document.getElementById('consentBlock').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    if (consentCheckbox2.checked && !phoneInput.value.trim()) {
+      phoneErr.style.display = 'block';
+      phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      phoneInput.focus();
+      return;
+    }
+
+    let firstError = null;
+    document.querySelectorAll('.q-block[data-required="true"]').forEach(qblock => {
+      if (qblock.classList.contains('hidden-skip')) return;
+      const radios = qblock.querySelectorAll('input[type=radio]');
+      const answered = [...radios].some(r => r.checked);
+      if (!answered) {
+        qblock.classList.add('has-error');
+        if (!firstError) firstError = qblock;
+      }
+    });
+
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    document.getElementById('btnSubmit').disabled = true;
+    document.getElementById('btnSubmit').textContent = '제출 중...';
+
+    setTimeout(() => {
+      document.getElementById('surveyWrap').querySelectorAll('.section-block').forEach(el => {
+        el.style.display = 'none';
+      });
+      document.getElementById('completeScreen').style.display = 'block';
+      document.getElementById('submitArea').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 800);
+  }
+
+  document.querySelectorAll('textarea, input[type=text]').forEach(el => {
+    el.addEventListener('input', updateProgress);
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
